@@ -1,0 +1,22 @@
+{
+  "mappings": {
+    "net/skinchange/mixin/MixinTextField": {
+      "keyPressed": "Lnet/minecraft/class_342;keyPressed(III)Z",
+      "charTyped": "Lnet/minecraft/class_342;charTyped(CI)Z"
+    },
+    "net/skinchange/mixin/MixinMultiplayerMenu": {
+      "init": "Lnet/minecraft/class_500;init()V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "net/skinchange/mixin/MixinTextField": {
+        "keyPressed": "Lnet/minecraft/class_342;keyPressed(III)Z",
+        "charTyped": "Lnet/minecraft/class_342;charTyped(CI)Z"
+      },
+      "net/skinchange/mixin/MixinMultiplayerMenu": {
+        "init": "Lnet/minecraft/class_500;init()V"
+      }
+    }
+  }
+}
