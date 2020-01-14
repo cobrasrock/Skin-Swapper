@@ -1,4 +1,4 @@
-﻿# Minecraft Skin Change Mod
+﻿# Skin Swapper
 
 This mod allows you to change your skin in game quickly and easily.
 
