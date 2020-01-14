@@ -13,7 +13,7 @@ This mod allows you to change your skin in game quickly and easily.
 
 ## Download
 
-- Download from CurseForge(https://www.curseforge.com/minecraft/mc-mods/skin-swapper/files/)
+- [Download from CurseForge](https://www.curseforge.com/minecraft/mc-mods/skin-swapper/files/)
 - Files page
 
 ## Credits
