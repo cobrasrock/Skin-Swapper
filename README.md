@@ -2,7 +2,8 @@
 
 This mod allows you to change your skin in game quickly and easily.
 
-![Image of the mod](https://imgur.com/a/OkGaBJz)
+![Image of the mod](https://i.imgur.com/QKyl3Zq.png)
+
 
 ## Features
 
