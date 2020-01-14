@@ -41,7 +41,7 @@ public class SkinScreen extends Screen
     protected void init()
     {
         //does nothing but darken screen
-        this.previewList = new SkinListWidget(this.minecraft, this.width/2 + 4, 0, 36 ,this.height-36, 36);
+        this.previewList = new SkinListWidget(this.minecraft, this.width/2 + 4, this.height, 36 ,this.height-36, 36);
         this.previewList.setLeftPos(this.width/2+4);
         this.children.add(this.previewList);
 
