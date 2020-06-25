@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.6-SNAPSHOT'
+	id 'fabric-loom' version '0.4-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -36,6 +36,8 @@ dependencies {
     	compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
     	include group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
     	implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
+
+		implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 processResources {

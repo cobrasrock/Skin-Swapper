@@ -1,31 +1,31 @@
 package net.skinchange.changeskin;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.util.EntityUtils;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.HttpResponse;
-
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.io.PrintWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Scanner;
-import java.net.InetAddress;
-
+import net.minecraft.client.resource.language.I18n;
 import net.skinchange.gui.AccountScreen;
 import net.skinchange.gui.SkinScreen;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.util.Base64;
+import java.util.Scanner;
 
 
 public abstract class skinChange
@@ -38,7 +38,7 @@ public abstract class skinChange
         {
             if("127.0.0.1".equals(InetAddress.getLocalHost().getHostAddress().toString()))
             {
-                scr.error = "No Internet Connection";
+                scr.error = I18n.translate("skin.no_internet");
                 return false;
             }
             HttpPost http = new HttpPost("https://authserver.mojang.com/authenticate");
@@ -66,7 +66,7 @@ public abstract class skinChange
             }
             catch(Exception e)
             {
-                scr.error = "Invalid Username or Password";
+                scr.error = I18n.translate("skin.invalid_username_password");
                 return false;
             }
 
@@ -84,7 +84,7 @@ public abstract class skinChange
             {
                 if("127.0.0.1".equals(InetAddress.getLocalHost().getHostAddress().toString()))
                 {
-                    scr.error = "No Internet Connection";
+                    scr.error = I18n.translate("skin.no_internet");
                     return false;
                 }
                 Scanner scan = new Scanner(new File("config\\skinchange\\data.txt"));
@@ -113,12 +113,16 @@ public abstract class skinChange
                 http.addHeader("Authorization", "Bearer " + auth);
 
                 httpClient.execute(http);
-                return true;
+                if(download(username,fname)) {
+                    return true;
+                }
+                scr.error = I18n.translate("skin.relog");
+                return false;
                 
             }
             catch(Exception e)
             {
-                scr.error = "Invalid Username or Password";
+                scr.error = I18n.translate("skin.invalid_username_password");
                 return false;
             }
     }
@@ -137,4 +141,51 @@ public abstract class skinChange
         rd.close();
         return result.toString();
      }
+
+    public static boolean download(String username, File skin)
+    {
+        try
+        {
+            //act 1 gets uuid
+            String a = skinChange.getHTML("https://api.mojang.com/users/profiles/minecraft/" + username);
+            JsonObject json = new JsonParser().parse(a).getAsJsonObject();
+            String b = json.get("id").getAsString();
+
+            //act 2 gets session texture value
+            a = skinChange.getHTML("https://sessionserver.mojang.com/session/minecraft/profile/" + b);
+
+            json = new JsonParser().parse(a).getAsJsonObject();
+            JsonArray c = json.getAsJsonArray("properties");
+            for(int i = 0; i<c.size(); i++)
+            {
+                JsonObject temp = c.get(i).getAsJsonObject();
+                b = temp.get("value").getAsString();
+            }
+
+            //act 3 decodes texture
+            byte[] decoded = Base64.getDecoder().decode(b);
+            b = new String(decoded, "UTF-8");
+
+            //act 4 gets url from texture
+            json = new JsonParser().parse(b).getAsJsonObject();
+            b = json.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+
+            //act 5 downloads image
+            URL url = new URL(b);
+            BufferedImage img = ImageIO.read(url);
+            File file = new File("config\\skinchange\\" + "temp" + ".png");
+            ImageIO.write(img, "png", file);
+
+            if(FileUtils.contentEquals(file, skin)){
+                return true;
+            }
+
+            return false;
+
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
 }

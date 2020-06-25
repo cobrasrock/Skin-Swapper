@@ -1,25 +1,26 @@
 package net.skinchange.gui;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.LiteralText;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-
-import java.util.Base64;
-import java.io.File;
-import java.net.URL;
-import java.net.UnknownHostException;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.skinchange.changeskin.skinChange;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.Base64;
+import java.util.Objects;
 
 public class DownloadScreen extends Screen
 {
@@ -38,28 +39,28 @@ public class DownloadScreen extends Screen
     @Override
     protected void init()
     {
-        this.minecraft.keyboard.enableRepeatEvents(true);
+        Objects.requireNonNull(this.client).keyboard.enableRepeatEvents(true);
 
-        this.addButton(new ButtonWidget((this.width - ((this.width/2)+4)/2)+6, this.height - 28, 100, 20, "Back", button -> MinecraftClient.getInstance().openScreen(parent)));
-        this.addButton(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, "Download", button -> {
+        this.addButton(new ButtonWidget((this.width - ((this.width/2)+4)/2)+6, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent)));
+        this.addButton(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, new TranslatableText("skin.download"), button -> {
             if(download(downloadField.getText()))
             {
                 MinecraftClient.getInstance().openScreen(parent);
             }
         }));
 
-        this.downloadField = new TextFieldWidget(this.font, (this.width/2 - 150), 20, 300, 20, this.downloadField, "Username: ");
+        this.downloadField = new TextFieldWidget(this.font, (this.width/2 - 150), 20, 300, 20, this.downloadField, new TranslatableText("skin.username"));
         this.downloadField.setMaxLength(512);
         this.children.add(this.downloadField);
     }
     
-    public void render(int mouseX, int mouseY, float delta)
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        super.renderDirtBackground(255);
-        this.downloadField.render(mouseX, mouseY, delta);
-        super.render(mouseX, mouseY, delta);
-        drawCenteredString(font, "Username:", this.width/2, 5, 0xFFFFFF);
-        drawCenteredString(font, error, this.width/2, this.height/2, 0xFFFFFF);
+        this.renderBackground(matrices);
+        this.downloadField.render(matrices, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
+        drawCenteredString(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
+        drawCenteredString(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
     }
 
     @Override
@@ -108,12 +109,12 @@ public class DownloadScreen extends Screen
         }
         catch(UnknownHostException e)
         {
-            error = ("No Internet Connection");
+            error = (I18n.translate("skin.no_internet"));
             return false;
         }
         catch(Exception e)
         {
-            error = ("Invalid username");
+            error = (I18n.translate("skin.invalid_username"));
             return false;
         }
     }

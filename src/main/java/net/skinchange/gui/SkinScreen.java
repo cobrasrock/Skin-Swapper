@@ -1,22 +1,24 @@
 package net.skinchange.gui;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.text.LiteralText;
-//import net.minecraft.util.SystemUtil;
-
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.ConfirmScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
+import org.apache.commons.lang3.Validate;
 
-import java.io.InputStream;
-import java.io.FileInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 
-import org.apache.commons.lang3.Validate;
+//import net.minecraft.util.SystemUtil;
 
 public class SkinScreen extends Screen
 {
@@ -28,6 +30,7 @@ public class SkinScreen extends Screen
     private boolean oldSkin;
     private File file;
     public String error;
+    
 
     public SkinScreen(Screen scr)
     {
@@ -41,33 +44,33 @@ public class SkinScreen extends Screen
     protected void init()
     {
         //does nothing but darken screen
-        this.previewList = new SkinListWidget(this.minecraft, this.width/2 + 4, this.height, 36 ,this.height-36, 36);
+        this.previewList = new SkinListWidget(this.client, this.width/2 + 4, this.height, 36 ,this.height-36, 36);
         this.previewList.setLeftPos(this.width/2+4);
         this.children.add(this.previewList);
 
         //lists skins
-        this.skinList = new SkinListWidget(this.minecraft, this.width/2 - 4, this.height, 36 ,this.height-52, 36);
+        this.skinList = new SkinListWidget(this.client, this.width/2 - 4, this.height, 36 ,this.height-52, 36);
         this.skinList.setLeftPos(0);
         this.children.add(this.skinList);
 
         addSkins(folder); //adds skins
 
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, this.height - 28, 100, 20, "Back", button -> MinecraftClient.getInstance().openScreen(parent))); //back
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20, "Log In", button -> //log in
+        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent))); //back
+        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20, new TranslatableText("skin.login"), button -> //log in
         {
-            this.minecraft.openScreen(new AccountScreen(this));
+            this.client.openScreen(new AccountScreen(this));
         })
         {
             @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = (file.length() == 0);
                 active = (file.length() == 0);
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20, "Log Out", button -> //log out
+        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20 ,new TranslatableText("skin.log_out"), button -> //log out
         {
             try{
                 PrintWriter writer = new PrintWriter(file); //clears auth file
@@ -77,91 +80,90 @@ public class SkinScreen extends Screen
             catch(Exception e){}
         })
         {
-            @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = (file.length() != 0);
                 active = (file.length() != 0);
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2 - 52 - 52, this.height - 28, 100, 20, "Change Skin", button -> //change skin
+        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2 - 52 - 52, this.height - 28, 100, 20, new TranslatableText("skin.change_skin"), button -> //change skin
         {
-            this.minecraft.openScreen(new ConfirmScreen(this::changeSkin, new LiteralText("Are you sure you want to change your skin?"), new LiteralText("Your current skin will be changed to '" + skinList.getSelected().fname + "'"), "Yes", "Cancel"));
+            this.client.openScreen(new ConfirmScreen(this::changeSkin, new LiteralText(I18n.translate("skin.are_you_sure")), new LiteralText(I18n.translate("skin.changeto") + " '" + skinList.getSelected().fname + "'"), new TranslatableText("gui.yes"), new TranslatableText("gui.cancel")));
         })
         {
             @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = true;
                 active = (skinList.getSelected() != null)&&(file.length() != 0);
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, this.height - 24, 100, 20, "Open Skin Folder", button -> Util.getOperatingSystem().open(new File("skins")))); //open skin folder
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.open_folder"), button -> Util.getOperatingSystem().open(new File("skins")))); //open skin folder
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, this.height - 24, 100, 20, "Delete Skin", button -> //delete skin
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.delete_skin"), button -> //delete skin
         {
-            this.minecraft.openScreen(new ConfirmScreen(this::removeEntry, new LiteralText("Are you sure you want to remove this skin?"), new LiteralText("'" + skinList.getSelected().fname + "' will be lost forever! (A long time!)"), "Delete", "Cancel"));
+            this.client.openScreen(new ConfirmScreen(this::removeEntry, new LiteralText(I18n.translate("skin.are_you_sure_remove")), new LiteralText("'"+skinList.getSelected().fname+"' "+I18n.translate("skin.long")) , new TranslatableText("selectWorld.delete"), new TranslatableText("gui.cancel")));
         })
         {
             @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = true;
                 active = (skinList.getSelected() != null);
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40-4, this.height - 48, 100, 20, "Skin type: Classic", button -> //classic select button
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.classic"), button -> //classic select button
         {skinList.getSelected().toggleSkinType();})
         {
             @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = true;
                 active = (skinList.getSelected() != null&& skinList.getSelected().skinType == "Slim");
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40-4, this.height - 48, 100, 20, "Skin type: Slim", button -> //slim select button
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.slim"), button -> //slim select button
         {skinList.getSelected().toggleSkinType();})
         {
             @Override
-            public void render(int var1, int var2, float var3)
+            public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = true;
                 active = (skinList.getSelected() != null&& skinList.getSelected().skinType == "Classic");
-                super.render(var1, var2, var3);
+                super.render(matrices, var1, var2, var3);
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, 8, 100, 20, "Download Skin", button -> MinecraftClient.getInstance().openScreen(new DownloadScreen(this)))); //download button
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, 8, 100, 20, new TranslatableText("skin.download_skin"), button -> MinecraftClient.getInstance().openScreen(new DownloadScreen(this)))); //download button
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, 8, 100, 20, "Refresh", button -> { //refresh
+        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, 8, 100, 20, new TranslatableText("selectServer.refresh"), button -> { //refresh
             addSkins(folder);
             this.skinList.setSelected(null);
         })); 
     }
 
-    public void render(int mouseX, int mouseY, float delta)
+    public void render(MatrixStack matrices,  int mouseX, int mouseY, float delta)
     {
-        super.renderDirtBackground(0);
-        this.skinList.render(mouseX, mouseY, delta);
-        this.previewList.render(mouseX, mouseY, delta);
-        super.render(mouseX, mouseY, delta);
+        this.renderBackground(matrices);
+        this.skinList.render(matrices, mouseX, mouseY, delta);
+        this.previewList.render(matrices, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
         try
         {
-            skinList.getSelected().drawSkin((this.width - this.previewList.getRowWidth()/2)-16, this.height/2 - 64);
+            skinList.getSelected().drawSkin(this.width - this.previewList.getRowWidth()/2 -16, this.height/2 - 64, matrices);
         }
         catch(Exception e){}
 
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
-        drawCenteredString(font, error, this.width - this.previewList.getRowWidth()/2, 40, 0xFFFFFF);
+        drawCenteredString(matrices,  font, error, this.width - this.previewList.getRowWidth()/2, 40, 0xFFFFFF);
     }
 
     public void addSkins(final File folder)
@@ -230,7 +232,7 @@ public class SkinScreen extends Screen
             skinList.getSelected().deleteSkin(); skinList.children().remove(skinList.getSelected());
             this.skinList.setSelected(null);
         }
-        this.minecraft.openScreen(this);
+        this.client.openScreen(this);
     }
 
     private void changeSkin(boolean confirmedAction)
@@ -244,12 +246,12 @@ public class SkinScreen extends Screen
             }
             else
             {
-                this.minecraft.openScreen(this);
+                this.client.openScreen(this);
             }
         }
         else
         {
-            this.minecraft.openScreen(this);
+            this.client.openScreen(this);
         }
     }
 }

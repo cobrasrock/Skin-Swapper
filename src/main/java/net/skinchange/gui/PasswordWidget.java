@@ -2,6 +2,7 @@ package net.skinchange.gui;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.LiteralText;
 
 public class PasswordWidget extends TextFieldWidget
 {
@@ -29,7 +30,7 @@ public class PasswordWidget extends TextFieldWidget
 
     public PasswordWidget(TextRenderer f, int px, int py, int x, int y, String s)
     {
-        super(f, px, py, x, y, s);
+        super(f, px, py, x, y, new LiteralText(s));
         this.setMaxLength(512);
         updateText();
     }

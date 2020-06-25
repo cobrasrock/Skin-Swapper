@@ -2,8 +2,6 @@ package net.skinchange.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.skinchange.gui.SkinEntry;
-
 public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
 {
     public SkinListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m)
@@ -16,7 +14,6 @@ public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
         this.setSelected(entry);
     }
 
-    @Override
     protected int getScrollbarPosition()
     {
 		return this.width - 6;
@@ -33,5 +30,5 @@ public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
     {
 		return this.width - (Math.max(0, this.getMaxPosition() - (this.bottom - this.top - 4)) > 0 ? 18 : 12);
     }
-    
+
 }

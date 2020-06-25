@@ -1,7 +1,8 @@
 package net.skinchange;
 
 import net.fabricmc.api.ModInitializer;
-import java.io.*;
+
+import java.io.File;
 
 public class main implements ModInitializer
 {
