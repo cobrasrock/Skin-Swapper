@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.skinchange.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "MixinMultiplayerMenu",
+    "MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

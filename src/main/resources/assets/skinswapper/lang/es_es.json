@@ -1,0 +1,15 @@
+{
+  "skin.download": "Descargar",
+  "skin.no_internet": "Sin conexión a Internet",
+  "skin.change_skin": "Cambio de atuendo",
+  "skin.delete_skin": "Eliminar atuendon",
+  "skin.open_folder": "Carpeta de atuendo abierto",
+  "skin.are_you_sure": "¿Estás seguro de que quieres cambiar tu atuendo?",
+  "skin.are_you_sure_remove": "¿Estás seguro de que quieres quitar este atuendo?",
+  "skin.changeto": "Su aspecto actual se cambiará a",
+  "skin.classic": "Tipo de piel: clásica",
+  "skin.slim": "Tipo de piel: Delgado",
+  "skin.download_skin": "Descargar Skin",
+  "skin.invalid": "Token no válido (reiniciar juego)",
+  "skin.long": "se perderá para siempre! (¡Mucho tiempo!)"
+}

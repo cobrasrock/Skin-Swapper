@@ -1,0 +1,15 @@
+{
+  "skin.download": "Herunterladen",
+  "skin.no_internet": "No Internet Connection",
+  "skin.change_skin": "Outfit wechseln",
+  "skin.delete_skin": "Outfit löschen",
+  "skin.open_folder": "Outfit-Ordner öffnen",
+  "skin.are_you_sure": "Bist du sicher, dass du dein Outfit ändern willst?",
+  "skin.are_you_sure_remove": "Bist du sicher, dass du dieses Outfit entfernen möchtest?",
+  "skin.changeto": "Ihr aktuelles Outfit wird in geändert",
+  "skin.classic": "Outfit-Typ: Klassisch",
+  "skin.slim": "Outfit-Typ: Schlank",
+  "skin.download_skin": "Laden Sie Outfit herunter",
+  "skin.invalid": "Ungültiges Token(Spiel neu starten)",
+  "skin.long": "wird für immer verloren sein! (Eine lange Zeit!)"
+}

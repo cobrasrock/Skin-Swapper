@@ -1,0 +1,15 @@
+{
+  "skin.download": "İndir",
+  "skin.no_internet": "İnternet Baglantisi Yok",
+  "skin.change_skin": "Kıyafeti Değiştir",
+  "skin.delete_skin": "Kıyafeti Sil",
+  "skin.open_folder": "Kıyafeti Dosyasını Aç",
+  "skin.are_you_sure": "Kıyafeti Değiştirmek İstediğine Eminmisin?",
+  "skin.are_you_sure_remove": "Kıyafeti Çıkartmak İstediğine Eminmisin?",
+  "skin.changeto": "Şimdiki Kıyafetiniz Bu Kıyafete Çevrilcektir",
+  "skin.classic": "Kıyafet tipi: Klasik",
+  "skin.slim": "Kıyafet tipi: İnce",
+  "skin.download_skin": "Kıyafeti İndir",
+  "skin.invalid": "Geçersiz belirteç(Oyunu Tekrar Aç)",
+  "skin.long": "Sonsuza Kadar Kayıp olucak! (Uzun Bir Zaman!)"
+}

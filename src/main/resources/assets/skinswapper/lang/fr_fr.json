@@ -1,0 +1,15 @@
+{
+  "skin.download": "Télécharger",
+  "skin.no_internet": "Pas de connexion Internet",
+  "skin.change_skin": "Changer de tenue",
+  "skin.delete_skin": "Supprimer la tenue",
+  "skin.open_folder": "Ouvrir le dossier Outfit",
+  "skin.are_you_sure": "Êtes-vous sûr de vouloir changer de tenue?",
+  "skin.are_you_sure_remove": "Voulez-vous vraiment supprimer cette tenue?",
+  "skin.changeto": "Votre tenue actuelle sera remplacée par",
+  "skin.classic": "Type de tenue: Classique",
+  "skin.slim": "Skin type: Slime",
+  "skin.download_skin": "Télécharger la tenue",
+  "skin.invalid": "Jeton non valide (redémarrage du jeu)",
+  "skin.long": "sera perdu à jamais! (Un long moment!)"
+}

@@ -1,0 +1,17 @@
+{
+	"skin.username": "Username:",
+	"skin.invalid_username": "Invalid Username",
+  "skin.download": "Download",
+  "skin.no_internet": "No Internet Connection",
+  "skin.change_skin": "Change Skin",
+  "skin.delete_skin": "Delete Skin",
+  "skin.open_folder": "Open Skin Folder",
+  "skin.are_you_sure": "Are you sure you want to change your skin?",
+  "skin.are_you_sure_remove": "Are you sure you want to remove this skin?",
+  "skin.changeto": "Your current skin will be changed to",
+  "skin.classic": "Skin type: Classic",
+  "skin.slim": "Skin type: Slim",
+  "skin.download_skin": "Download Skin",
+  "skin.invalid": "Invalid Token(Restart Game)",
+  "skin.long": "will be lost forever! (A long time!)"
+}

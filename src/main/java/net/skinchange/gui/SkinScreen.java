@@ -56,37 +56,6 @@ public class SkinScreen extends Screen
         addSkins(folder); //adds skins
 
         this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent))); //back
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20, new TranslatableText("skin.login"), button -> //log in
-        {
-            this.client.openScreen(new AccountScreen(this));
-        })
-        {
-            @Override
-            public void render(MatrixStack matrices, int var1, int var2, float var3)
-            {
-                visible = (file.length() == 0);
-                active = (file.length() == 0);
-                super.render(matrices, var1, var2, var3);
-            }
-        });
-
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, 8, 100, 20 ,new TranslatableText("skin.log_out"), button -> //log out
-        {
-            try{
-                PrintWriter writer = new PrintWriter(file); //clears auth file
-                writer.print("");
-                writer.close();
-            }
-            catch(Exception e){}
-        })
-        {
-            public void render(MatrixStack matrices, int var1, int var2, float var3)
-            {
-                visible = (file.length() != 0);
-                active = (file.length() != 0);
-                super.render(matrices, var1, var2, var3);
-            }
-        });
 
         this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2 - 52 - 52, this.height - 28, 100, 20, new TranslatableText("skin.change_skin"), button -> //change skin
         {
