@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
 
@@ -94,7 +95,7 @@ public class DownloadScreen extends Screen
 
             //act 3 decodes texture
             byte[] decoded = Base64.getDecoder().decode(b);
-            b = new String(decoded, "UTF-8");
+            b = new String(decoded, StandardCharsets.UTF_8);
 
             //act 4 gets url from texture
             json = new JsonParser().parse(b).getAsJsonObject();
@@ -103,7 +104,7 @@ public class DownloadScreen extends Screen
             //act 5 downloads image
             URL url = new URL(b);
             BufferedImage img = ImageIO.read(url);
-            File file = new File("skins\\" + usernameCAPS + ".png");
+            File file = new File("skins" + File.separator + usernameCAPS + ".png");
             ImageIO.write(img, "png", file);
             return true;
         }

@@ -37,7 +37,7 @@ public class SkinScreen extends Screen
         super(new LiteralText(""));
         this.parent = scr; 
         this.folder = new File("skins");
-        this.file = new File("config\\skinchange\\data.txt");
+        this.file = new File("config" + File.separator + "skinchange" + File.separator + "data.txt");
     }
     
     @Override
