@@ -29,7 +29,7 @@ public abstract class skinChange
                     scr.error = I18n.translate("skin.no_internet");
                     return false;
                 }
-                Scanner scan = new Scanner(new File("config\\skinchange\\data.txt"));
+                Scanner scan = new Scanner(new File("config" + File.separator + "skinchange" + File.separator + "data.txt"));
                 String username = scan.nextLine();
                 String auth = scan.nextLine();
 

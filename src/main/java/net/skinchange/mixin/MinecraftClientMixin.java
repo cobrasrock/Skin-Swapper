@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+import java.io.File;
 import java.io.PrintWriter;
 
 
@@ -18,7 +18,7 @@ public class MinecraftClientMixin
     public void MinecraftClient(RunArgs args, CallbackInfo info)
     {
         try{
-            PrintWriter writer = new PrintWriter("config\\skinchange\\data.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("config" + File.separator + "skinchange" + File.separator + "data.txt", "UTF-8");
             writer.println(args.network.session.getUsername());
             writer.println(args.network.session.getAccessToken());
             writer.close();

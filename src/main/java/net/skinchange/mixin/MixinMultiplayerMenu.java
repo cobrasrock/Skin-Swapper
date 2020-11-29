@@ -26,7 +26,7 @@ public class MixinMultiplayerMenu extends Screen
 	@Inject(at = @At("RETURN"), method = "init")
 	private void init(CallbackInfo info)
 	{
-		this.addButton(new ButtonWidget(this.width / 24, this.height / 36, 100, 20, new LiteralText("Change Skin"), button ->{
+		this.addButton(new ButtonWidget(this.width - 125, this.height / 36, 100, 20, new LiteralText("Change Skin"), button ->{
 			MinecraftClient.getInstance().openScreen(new SkinScreen(this));
 		}));
 

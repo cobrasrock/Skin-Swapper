@@ -21,6 +21,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Base64;
 import java.util.Objects;
+import java.nio.charset.StandardCharsets;
 
 public class DownloadScreen extends Screen
 {
@@ -39,7 +40,7 @@ public class DownloadScreen extends Screen
     @Override
     protected void init()
     {
-        Objects.requireNonNull(this.client).keyboard.enableRepeatEvents(true);
+        Objects.requireNonNull(this.client).keyboard.setRepeatEvents(true);
 
         this.addButton(new ButtonWidget((this.width - ((this.width/2)+4)/2)+6, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent)));
         this.addButton(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, new TranslatableText("skin.download"), button -> {
@@ -94,7 +95,7 @@ public class DownloadScreen extends Screen
 
             //act 3 decodes texture
             byte[] decoded = Base64.getDecoder().decode(b);
-            b = new String(decoded, "UTF-8");
+            b = new String(decoded, StandardCharsets.UTF_8);
 
             //act 4 gets url from texture
             json = new JsonParser().parse(b).getAsJsonObject();
@@ -103,7 +104,7 @@ public class DownloadScreen extends Screen
             //act 5 downloads image
             URL url = new URL(b);
             BufferedImage img = ImageIO.read(url);
-            File file = new File("skins\\" + usernameCAPS + ".png");
+            File file = new File("skins" + File.separator + usernameCAPS + ".png");
             ImageIO.write(img, "png", file);
             return true;
         }
