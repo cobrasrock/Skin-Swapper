@@ -6,7 +6,8 @@
   ],
   "client": [
     "MixinMultiplayerMenu",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "MixinPlayerSkinProvider"
   ],
   "injectors": {
     "defaultRequire": 1

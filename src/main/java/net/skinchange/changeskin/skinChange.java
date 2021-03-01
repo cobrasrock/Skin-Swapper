@@ -23,46 +23,46 @@ public abstract class skinChange
     {
         HttpClient httpClient = HttpClientBuilder.create().build();
         try
+        {
+            if("127.0.0.1".equals(InetAddress.getLocalHost().getHostAddress().toString()))
             {
-                if("127.0.0.1".equals(InetAddress.getLocalHost().getHostAddress().toString()))
-                {
-                    scr.error = I18n.translate("skin.no_internet");
-                    return false;
-                }
-                Scanner scan = new Scanner(new File("config" + File.separator + "skinchange" + File.separator + "data.txt"));
-                String username = scan.nextLine();
-                String auth = scan.nextLine();
+                scr.error = I18n.translate("skin.no_internet");
+                return false;
+            }
+            Scanner scan = new Scanner(new File("config" + File.separator + "skinchange" + File.separator + "data.txt"));
+            String username = scan.nextLine();
+            String auth = scan.nextLine();
 
-                scan.close();
+            scan.close();
 
-                //gets uuid
-                String a = getHTML("https://api.mojang.com/users/profiles/minecraft/"+username);
-                JsonObject json = new JsonParser().parse(a).getAsJsonObject();
-                String b = json.get("id").getAsString();
+            //gets uuid
+            String a = getHTML("https://api.mojang.com/users/profiles/minecraft/"+username);
+            JsonObject json = new JsonParser().parse(a).getAsJsonObject();
+            String b = json.get("id").getAsString();
 
-                //uploads skin
-                HttpPut http = new HttpPut("https://api.mojang.com/user/profile/"+b+"/skin");
+            //uploads skin
+            HttpPut http = new HttpPut("https://api.mojang.com/user/profile/"+b+"/skin");
 
-                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                builder.addTextBody("model", skinType.toLowerCase(), ContentType.TEXT_PLAIN);
-                builder.addBinaryBody(
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addTextBody("model", skinType.toLowerCase(), ContentType.TEXT_PLAIN);
+            builder.addBinaryBody(
                     "file",
                     new FileInputStream(fname),
                     ContentType.APPLICATION_OCTET_STREAM,
                     fname.getName()
-                ); 
+            );
 
-                http.setEntity(builder.build());
-                http.addHeader("Authorization", "Bearer " + auth);
-                httpClient.execute(http);
+            http.setEntity(builder.build());
+            http.addHeader("Authorization", "Bearer " + auth);
+            httpClient.execute(http);
 
-                return true;
-            }
-            catch(Exception e)
-            {
-                scr.error = I18n.translate("skin.invalid");
-                return false;
-            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            scr.error = I18n.translate("skin.invalid");
+            return false;
+        }
     }
     //taken from stack overflow
     public static String getHTML(String urlToRead) throws Exception {
@@ -74,9 +74,9 @@ public abstract class skinChange
         String line;
         while ((line = rd.readLine()) != null)
         {
-           result.append(line);
+            result.append(line);
         }
         rd.close();
         return result.toString();
-     }
+    }
 }
