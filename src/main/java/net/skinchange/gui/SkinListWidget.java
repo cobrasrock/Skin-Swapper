@@ -2,6 +2,7 @@ package net.skinchange.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+
 public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
 {
     public SkinListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m)

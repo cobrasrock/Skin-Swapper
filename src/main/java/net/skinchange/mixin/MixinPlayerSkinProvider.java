@@ -30,6 +30,5 @@ public abstract class MixinPlayerSkinProvider{
 		if (map.isEmpty()) {
 			getSessionService().fillProfileProperties(profile, requireSecure);
 		}
-
 	}
 }

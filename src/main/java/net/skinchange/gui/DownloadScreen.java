@@ -42,8 +42,8 @@ public class DownloadScreen extends Screen
     {
         Objects.requireNonNull(this.client).keyboard.setRepeatEvents(true);
 
-        this.addButton(new ButtonWidget((this.width - ((this.width/2)+4)/2)+6, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent)));
-        this.addButton(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, new TranslatableText("skin.download"), button -> {
+        this.addDrawableChild(new ButtonWidget((this.width - ((this.width/2)+4)/2)+6, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent)));
+        this.addDrawableChild(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, new TranslatableText("skin.download"), button -> {
             if(download(downloadField.getText()))
             {
                 MinecraftClient.getInstance().openScreen(parent);
@@ -52,7 +52,7 @@ public class DownloadScreen extends Screen
 
         this.downloadField = new TextFieldWidget(this.font, (this.width/2 - 150), 20, 300, 20, this.downloadField, new TranslatableText("skin.username"));
         this.downloadField.setMaxLength(512);
-        this.children.add(this.downloadField);
+        this.addSelectableChild(this.downloadField);
     }
     
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
@@ -60,8 +60,8 @@ public class DownloadScreen extends Screen
         this.renderBackground(matrices);
         this.downloadField.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
-        drawCenteredString(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
-        drawCenteredString(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
+        drawCenteredText(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
+        drawCenteredText(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.File;
 import java.io.PrintWriter;
 
-
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin
 {

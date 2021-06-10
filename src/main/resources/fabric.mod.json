@@ -20,7 +20,8 @@
   "entrypoints": {
     "main": [
       "net.skinchange.main"
-    ]
+    ],
+    "modmenu": [ "net.skinchange.config.ModMenuConfig" ]
   },
   "mixins": [
     "skinswapper.mixins.json"

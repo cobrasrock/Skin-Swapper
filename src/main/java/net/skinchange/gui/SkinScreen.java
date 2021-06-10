@@ -11,14 +11,12 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
+import net.skinchange.config.SkinSwapperConfig;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.PrintWriter;
-
-//import net.minecraft.util.SystemUtil;
 
 public class SkinScreen extends Screen
 {
@@ -46,18 +44,18 @@ public class SkinScreen extends Screen
         //does nothing but darken screen
         this.previewList = new SkinListWidget(this.client, this.width/2 + 4, this.height, 36 ,this.height-36, 36);
         this.previewList.setLeftPos(this.width/2+4);
-        this.children.add(this.previewList);
+        this.addSelectableChild(this.previewList);
 
         //lists skins
         this.skinList = new SkinListWidget(this.client, this.width/2 - 4, this.height, 36 ,this.height-52, 36);
         this.skinList.setLeftPos(0);
-        this.children.add(this.skinList);
+        this.addSelectableChild(this.skinList);
 
         addSkins(folder); //adds skins
 
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent))); //back
+        this.addDrawableChild(new ButtonWidget(this.width - this.previewList.getRowWidth()/2, this.height - 28, 100, 20, new TranslatableText("gui.back"), button -> MinecraftClient.getInstance().openScreen(parent))); //back
 
-        this.addButton(new ButtonWidget(this.width - this.previewList.getRowWidth()/2 - 52 - 52, this.height - 28, 100, 20, new TranslatableText("skin.change_skin"), button -> //change skin
+        this.addDrawableChild(new ButtonWidget(this.width - this.previewList.getRowWidth()/2 - 52 - 52, this.height - 28, 100, 20, new TranslatableText("skin.change_skin"), button -> //change skin
         {
             this.client.openScreen(new ConfirmScreen(this::changeSkin, new LiteralText(I18n.translate("skin.are_you_sure")), new LiteralText(I18n.translate("skin.changeto") + " '" + skinList.getSelected().fname + "'"), new TranslatableText("gui.yes"), new TranslatableText("gui.cancel")));
         })
@@ -71,9 +69,9 @@ public class SkinScreen extends Screen
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.open_folder"), button -> Util.getOperatingSystem().open(new File("skins")))); //open skin folder
+        this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.open_folder"), button -> Util.getOperatingSystem().open(new File("skins")))); //open skin folder
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.delete_skin"), button -> //delete skin
+        this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, this.height - 24, 100, 20, new TranslatableText("skin.delete_skin"), button -> //delete skin
         {
             this.client.openScreen(new ConfirmScreen(this::removeEntry, new LiteralText(I18n.translate("skin.are_you_sure_remove")), new LiteralText("'"+skinList.getSelected().fname+"' "+I18n.translate("skin.long")) , new TranslatableText("selectWorld.delete"), new TranslatableText("gui.cancel")));
         })
@@ -87,7 +85,7 @@ public class SkinScreen extends Screen
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.classic"), button -> //classic select button
+        this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.classic"), button -> //classic select button
         {skinList.getSelected().toggleSkinType();})
         {
             @Override
@@ -99,7 +97,7 @@ public class SkinScreen extends Screen
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.slim"), button -> //slim select button
+        this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40-4, this.height - 48, 100, 20, new TranslatableText("skin.slim"), button -> //slim select button
         {skinList.getSelected().toggleSkinType();})
         {
             @Override
@@ -111,9 +109,10 @@ public class SkinScreen extends Screen
             }
         });
 
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, 8, 100, 20, new TranslatableText("skin.download_skin"), button -> MinecraftClient.getInstance().openScreen(new DownloadScreen(this)))); //download button
-
-        this.addButton(new ButtonWidget(this.skinList.getRowWidth()/2 + 52 - 40 -4, 8, 100, 20, new TranslatableText("selectServer.refresh"), button -> { //refresh
+        if(SkinSwapperConfig.showDownloadScreen) {
+            this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth() / 2 + 52 - 40 - 4, 8, 100, 20, new TranslatableText("skin.download_skin"), button -> MinecraftClient.getInstance().openScreen(new DownloadScreen(this)))); //download button
+        }
+        this.addDrawableChild(new ButtonWidget(this.skinList.getRowWidth()/2 - 52 - 40 -4, 8, 100, 20, new TranslatableText("selectServer.refresh"), button -> { //refresh
             addSkins(folder);
             this.skinList.setSelected(null);
         })); 
@@ -132,7 +131,7 @@ public class SkinScreen extends Screen
         catch(Exception e){}
 
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
-        drawCenteredString(matrices,  font, error, this.width - this.previewList.getRowWidth()/2, 40, 0xFFFFFF);
+        drawCenteredText(matrices,  font, error, this.width - this.previewList.getRowWidth()/2, 40, 0xFFFFFF);
     }
 
     public void addSkins(final File folder)
