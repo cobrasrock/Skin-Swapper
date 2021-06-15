@@ -1,29 +1,30 @@
 {
   "schemaVersion": 1,
-  "id": "skin_change",
-  "version": "1.0.0",
+  "id": "skinswapper",
+  "version": "2.1.0",
 
-  "name": "Minecraft Skin Change Mod",
-  "description": "This is a mod that adds an in game option to change your skin.",
+  "name": "Skin Swapper",
+  "description": "A mod that lets you change your skin in game.",
   "authors": [
     "cobrasrock"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/skin-swapper",
+    "sources": "https://github.com/cobrasrock/Skin-Swapper"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "GNU gpl 3",
+  "icon": "assets/skinswapper/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "net.skinchange.main"
-    ]
+    ],
+    "modmenu": [ "net.skinchange.config.ModMenuConfig" ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "skinswapper.mixins.json"
   ],
 
   "depends": {
