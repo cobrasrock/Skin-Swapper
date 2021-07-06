@@ -16,8 +16,8 @@ This mod allows you to change your skin in game quickly and easily.
 - [Download from CurseForge](https://www.curseforge.com/minecraft/mc-mods/skin-swapper/files/)
 ## Credits
 - cobrasrock - Owns and programmed mod
-- Prospector(ModMenu) - Helped get me started with reference code and inspiration for the gui
--  Katpowkid - Created the mod icon and provided feedback
+- archloom - Made porting to Forge easy
+- Katpowkid - Created the mod icon and provided feedback
 
 
 > **Note:** This mod requires fabric mod loader you can download that [here](https://fabricmc.net/use/)

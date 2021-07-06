@@ -1,2 +1,10 @@
 Manifest-Version: 1.0
+Specification-Title: skinswapper
+Specification-Vendor: cobrasrock
+Specification-Version: 1
+Implementation-Title: archloom-example-mod
+Implementation-Version: 2.0.1
+Implementation-Vendor: cobrasrock
+Implementation-Timestamp: 2021-07-06T17:01:05-0400
+MixinConfigs: skinswapper.mixins.json
 

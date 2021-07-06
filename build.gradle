@@ -1,6 +1,9 @@
+import com.sun.org.apache.xerces.internal.xinclude.XInclude11TextReader
+
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
-	id 'maven-publish'
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id 'forgified-fabric-loom' version '0.6-SNAPSHOT'
+    id 'maven-publish'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -10,85 +13,149 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
+configurations {
+    shadow
+}
+
+loom {
+    // specify the mixin configs used in this mod
+    // this will be added to the jar manifest as well!
+    mixinConfigs = [
+            "skinswapper.mixins.json"
+    ]
+
+    // this will create a data generator configuration
+    // that you can use to automatically generate assets and data
+    // using forge loom. Note that this currently *only* works
+    // for forge projects made with forge loom!
+    dataGen {
+        mod project.mod_id
+    }
+
+    // This allows you to modify your launch configurations,
+    // for example to add custom arguments. In this case, we want
+    // the data generator to check our resources directory for
+    // existing files. (see Forge's ExistingFileHelper for more info)
+    launches {
+        data {
+            arg "--existing", file("src/main/resources").absolutePath
+        }
+    }
+}
+
+repositories {
+    // Add repositories to retrieve artifacts from in here.
+    // You should only use this when depending on other mods because
+    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+    // for more information about repositories.
 }
 
 dependencies {
-	//to change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // to change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
+    // uncomment this if you want to use yarn mappings
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-	compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
-    	include group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
-    	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
 
-   	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
-    	include group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
-    	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
+    // your forge dependency, this is **required** when using Forge Loom in forge mode!
+    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
-    	compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
-    	include group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
-    	implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
+    // additional dependencies can be specified using loom's regular format
+    // specifying a "mod" dependency (like modImplementation or modApi)
+    // will cause loom to remap the file to your specified mappings
 
-		implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
+    shadow group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
+}
+
+shadowJar {
+    relocate "org.apache.http.entity", "net.cobrasrock.skinswapper.shadowed.impl.org.apache.http.entity"
+
+    configurations = [project.configurations.shadow]
+    classifier "shadow"
+}
+
+remapJar {
+    dependsOn(shadowJar)
+    input.set(shadowJar.archivePath)
+    archiveClassifier = "forge"
 }
 
 processResources {
-	inputs.property "version", project.version
+    // define properties that can be used during resource processing
+    inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
+    // this will replace the property "${version}" in your mods.toml
+    // with the version you've defined in your gradle.properties
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+
+    // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
+    // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
+    // We'll use that if it's available, but otherwise we'll use the older option.
+    def targetVersion = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        it.options.release = targetVersion
+    }
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 }
 
 jar {
-	from "LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+
+    // add some additional metadata to the jar manifest
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
 
-	// select the repositories you want to publish to
-	repositories {
-		// uncomment to publish to the local maven
-		// mavenLocal()
-	}
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
 }

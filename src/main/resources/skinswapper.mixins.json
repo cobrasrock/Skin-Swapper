@@ -1,12 +1,13 @@
 {
   "required": true,
-  "package": "net.skinchange.mixin",
+  "minVersion": "0.8",
+  "package": "net.cobrasrock.skinchange.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-    "MixinMultiplayerMenu",
     "MinecraftClientMixin",
+    "MixinMultiplayerMenu",
     "MixinPlayerSkinProvider"
   ],
   "injectors": {
