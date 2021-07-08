@@ -1,0 +1,22 @@
+{
+  "skin.username": "Ник игрока: ",
+  "skin.download": "Скачать скин",
+  "skin.username_email": "Ник/Почта",
+  "skin.password": "Пароль",
+  "skin.login": "Логин",
+  "skin.no_internet": "Нет подключения к интернету",
+  "skin.invalid_username": "Неверный ник",
+  "skin.invalid_username_password": "Недействительный ник или пароль",
+  "skin.change_skin": "Изменить скин",
+  "skin.delete_skin": "Удалить скин",
+  "skin.open_folder": "Открыть папку со скинами",
+  "skin.log_out": "Выйти из системы",
+  "skin.are_you_sure": "Вы уверены, что хотите сменить скин?",
+  "skin.are_you_sure_remove": "Вы уверены, что хотите удалить скин?",
+  "skin.changeto": "Ваш текущий скин будет изменен на",
+  "skin.classic": "Тип скина: обычный",
+  "skin.slim": "Тип скина: стройный",
+  "skin.download_skin": "Скачать скин",
+  "skin.long": "Скин будет удален навсегда!",
+  "skin.relog": "Скин не изменился. (Перезайдите, чтобы исправить)"
+}
