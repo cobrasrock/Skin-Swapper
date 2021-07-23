@@ -15,7 +15,7 @@
   "skin.invalid": "Недействительный токен, перезапустите игру!",
   "skin.long": "Скин будет удален навсегда!",
 
-  "skinswapper.midnightconfig.title":"Skin Swapper кофинг",
+  "skinswapper.midnightconfig.title":"Skin Swapper конфиг",
 
   "skinswapper.midnightconfig.modButton":"Расположение кнопки:",
   "skinswapper.midnightconfig.enum.ModButton.LEFT":"Слева",
