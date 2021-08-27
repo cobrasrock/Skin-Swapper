@@ -21,36 +21,42 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
 {
     protected final MinecraftClient client;
     public String fname;
-    public File skin_icon;
+    public File skin_file;
     public boolean oldSkin;
     public String skinType;
-    private NativeImage nativeImage;
     protected final SkinListWidget list;
-    private Identifier id;
-    private NativeImageBackedTexture nImage;
-    private int maxNameWidth;
+    public Identifier rawSkin;
+    public Identifier processedSkin;
     private static int identify = 0;
 
-    public SkinEntry(String text, File f, SkinListWidget list, NativeImage img, boolean old)
+    public SkinEntry(String text, File file, SkinListWidget list, NativeImage rawNativeImage, boolean old)
     {
         identify++;
-        fname = text;
+        this.fname = text;
         this.client = MinecraftClient.getInstance();
-        skin_icon = f;
+        this.skin_file = file;
         this.list = list;
-        nativeImage = img;
-        oldSkin = old;
-        id = new Identifier(""+identify);
-        nImage = new NativeImageBackedTexture(nativeImage);
+        this.oldSkin = old;
+        this.rawSkin = new Identifier("skinswapper_raw:"+identify); //raw skin file uploaded to minecraft.net
+        this.processedSkin = new Identifier("skinswapper_processed:"+identify); //skin file to be rendered
+
         this.skinType = genSkinType();
-        this.client.getTextureManager().registerTexture(id, nImage);
+
+        //registers the texture for the icon
+        NativeImageBackedTexture rawImageBackedTexture = new NativeImageBackedTexture(rawNativeImage);
+        this.client.getTextureManager().registerTexture(rawSkin, rawImageBackedTexture);
+
+        //registers texture to be rendered in 3d
+        NativeImage processedNativeImage = SkinUtils.remapTexture(rawNativeImage);
+        NativeImageBackedTexture processedImageBackedTexture = new NativeImageBackedTexture(processedNativeImage);
+        this.client.getTextureManager().registerTexture(processedSkin, processedImageBackedTexture);
     }
 
     public void render(MatrixStack matrices, int index, int y, int x, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean isSelected, float delta)
     {
         TextRenderer font = this.client.textRenderer;
         renderIcon(x,y,matrices);
-        maxNameWidth = rowWidth - 32 - 3;
+        int maxNameWidth = rowWidth - 32 - 3;
         if (font.getWidth(fname) > maxNameWidth)
         {
 			fname = font.trimToWidth(fname, maxNameWidth - font.getWidth("...")) + "...";
@@ -75,15 +81,15 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, id);
+        RenderSystem.setShaderTexture(0, rawSkin);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        if(oldSkin == true)
+        if(oldSkin)
         {
             //head icon
             DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
-            if(!skin_icon.getName().equals("Notch.png")) //Notch's skin uses black instead of transparency
+            if(!skin_file.getName().equals("Notch.png")) //Notch's skin uses black instead of transparency
             {
                 DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
             }
@@ -98,49 +104,51 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
 
     public void toggleSkinType()
     {
-        if(skinType == "Classic")
+        if(skinType.equals("classic"))
         {
-            skinType = "Slim";
+            skinType = "slim";
         }
         else
         {
-            skinType = "Classic";
+            skinType = "classic";
         }
     }
 
     public String genSkinType()
     {
         try{
-            BufferedImage image = ImageIO.read(skin_icon);
+            BufferedImage image = ImageIO.read(skin_file);
             int pixel = image.getRGB(50,19);
 
             if((pixel>>24) == 0x00)
             {
-                return "Slim";
+                return "slim";
             }
-            return "Classic";
-        }catch(Exception e){}
-        return null;
+            return "classic";
+        }catch(Exception e){
+            return null;
+        }
     }
 
     public void deleteSkin()
     {
-        skin_icon.delete();
+        skin_file.delete();
     }
+
 
     public void drawSkin(int k, int j, MatrixStack matrices)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, id);
+        RenderSystem.setShaderTexture(0, rawSkin);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        if(oldSkin == true)
+        if(oldSkin)
         {
             //head icon
             DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
-            if(!skin_icon.getName().equals("Notch.png")) //Notch's skin uses black instead of transparency
+            if(!skin_file.getName().equals("Notch.png")) //Notch's skin uses black instead of transparency
             {
                 DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
             }
@@ -151,7 +159,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
             //arm
 
             //left
-            if(skinType.equals("Slim"))
+            if(skinType.equals("slim"))
             {
                 DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 128);
             }
@@ -162,7 +170,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
             }
 
             //right(flips horizontal)
-            if(skinType.equals("Slim"))
+            if(skinType.equals("slim"))
             {
                 DrawableHelper.drawTexture(matrices, k+32, j+32, 184F, 80.0F, 4, 48, 256, 128);
                 DrawableHelper.drawTexture(matrices, k+36, j+32, 180F, 80.0F, 4, 48, 256, 128);
@@ -201,7 +209,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
             DrawableHelper.drawTexture(matrices, k, j+32, 80.0F, 144.0F, 32, 48, 256, 256);
 
             //left arm
-            if(skinType.equals("Slim"))
+            if(skinType.equals("slim"))
             {
                 DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 256);
                 DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 144.0F, 12, 48, 256, 256);
@@ -214,7 +222,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
             }
 
             //right arm
-            if(skinType.equals("Slim"))
+            if(skinType.equals("slim"))
             {
                 DrawableHelper.drawTexture(matrices, k+32, j+32, 144.0F, 208.0F, 12, 48, 256, 256);
                 DrawableHelper.drawTexture(matrices, k+32, j+32, 208.0F, 208.0F, 12, 48, 256, 256);

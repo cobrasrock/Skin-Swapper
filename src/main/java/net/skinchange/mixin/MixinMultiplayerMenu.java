@@ -38,10 +38,10 @@ public class MixinMultiplayerMenu extends Screen
 		}
 
 		//draws button
-		this.addDrawableChild(new ButtonWidget(buttonX, this.height / 36, 100, 20, new LiteralText("Change Skin"), button ->{
+		this.addDrawableChild(new ButtonWidget(buttonX, 6, 100, 20, new LiteralText("Change Skin"), button ->{
 			MinecraftClient.getInstance().openScreen(new SkinScreen(this));
 		}));
-		this.addSelectableChild(new ButtonWidget(buttonX, this.height / 36, 100, 20, new LiteralText("Change Skin"), button ->{
+		this.addSelectableChild(new ButtonWidget(buttonX, 6, 100, 20, new LiteralText("Change Skin"), button ->{
 			MinecraftClient.getInstance().openScreen(new SkinScreen(this));
 		}));
 	}

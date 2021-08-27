@@ -18,6 +18,7 @@ public abstract class MixinPlayerSkinProvider{
 	@Accessor("sessionService")
 	public abstract MinecraftSessionService getSessionService();
 
+	//refreshes skin for singleplayer
 	@Inject(at = @At("HEAD"), method = "loadSkin(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/texture/PlayerSkinProvider$SkinTextureAvailableCallback;Z)V")
 	private void loadSkin(GameProfile profile, PlayerSkinProvider.SkinTextureAvailableCallback callback, boolean requireSecure, CallbackInfo ci)
 	{

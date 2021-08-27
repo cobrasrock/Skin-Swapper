@@ -1,13 +1,23 @@
 package net.skinchange.gui;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.util.UUIDTypeAdapter;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.util.Identifier;
+import net.skinchange.changeskin.SkinChange;
 
 public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
 {
-    public SkinListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m)
+    SkinScreen parent;
+
+    public SkinListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m, SkinScreen parent)
     {
         super(minecraftClient, i, j, k, l, m);
+        this.parent = parent;
     }
 
     public void select(SkinEntry entry)
@@ -15,7 +25,8 @@ public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
         this.setSelected(entry);
     }
 
-    protected int getScrollbarPosition()
+    @Override
+    protected int getScrollbarPositionX()
     {
 		return this.width - 6;
     }

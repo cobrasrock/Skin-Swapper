@@ -6,8 +6,13 @@
   ],
   "client": [
     "MixinMultiplayerMenu",
-    "MinecraftClientMixin",
-    "MixinPlayerSkinProvider"
+    "MixinPlayerSkinProvider",
+    "AbstractClientPlayerEntityMixin",
+    "EntityRenderDispatcherMixin",
+    "LivingEntityRendererMixin",
+    "MixinPlayerEntity",
+    "ClientWorldMixin",
+    "PlayerListEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

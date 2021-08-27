@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "main": [
-      "net.skinchange.main"
+      "net.skinchange.SkinSwapper"
     ],
     "modmenu": [ "net.skinchange.config.ModMenuConfig" ]
   },

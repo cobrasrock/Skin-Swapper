@@ -12,7 +12,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.skinchange.changeskin.skinChange;
+import net.skinchange.changeskin.SkinChange;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -75,7 +75,7 @@ public class DownloadScreen extends Screen
         try
         {
             //act 1 gets uuid
-            String a = skinChange.getHTML("https://api.mojang.com/users/profiles/minecraft/" + username);
+            String a = SkinChange.getHTML("https://api.mojang.com/users/profiles/minecraft/" + username);
             JsonObject json = new JsonParser().parse(a).getAsJsonObject();
             String b = json.get("id").getAsString();
 
@@ -83,7 +83,7 @@ public class DownloadScreen extends Screen
             String usernameCAPS = json.get("name").getAsString();
 
             //act 2 gets session texture value
-            a = skinChange.getHTML("https://sessionserver.mojang.com/session/minecraft/profile/" + b);
+            a = SkinChange.getHTML("https://sessionserver.mojang.com/session/minecraft/profile/" + b);
 
             json = new JsonParser().parse(a).getAsJsonObject();
             JsonArray c = json.getAsJsonArray("properties");
