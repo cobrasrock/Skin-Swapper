@@ -14,6 +14,7 @@ This mod allows you to change your skin in game quickly and easily.
 ## Download
 
 - [Download from CurseForge](https://www.curseforge.com/minecraft/mc-mods/skin-swapper/files/)
+- [Download from Modrinth](https://modrinth.com/mod/skinswapper/versions)
 ## Credits
 - cobrasrock - Owns and programmed mod
 - archloom - Made porting to Forge easy
