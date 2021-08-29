@@ -38,7 +38,6 @@ public class SkinScreen extends Screen
         super(new LiteralText(""));
         this.parent = scr; 
         this.folder = new File("skins");
-        this.file = new File("config" + File.separator + "skinchange" + File.separator + "data.txt");
     }
     
     @Override
@@ -67,7 +66,7 @@ public class SkinScreen extends Screen
             public void render(MatrixStack matrices, int var1, int var2, float var3)
             {
                 visible = true;
-                active = (skinList.getSelected() != null)&&(file.length() != 0);
+                active = (skinList.getSelected() != null);
                 super.render(matrices, var1, var2, var3);
             }
         });
