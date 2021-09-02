@@ -1,15 +1,30 @@
 {
+  "skin.username": "Никнейм:",
+  "skin.invalid_username": "Некорректный ник",
   "skin.download": "Скачать",
   "skin.no_internet": "Нет соединения с интернетом",
-  "skin.change_skin": "Изменить наряд",
-  "skin.delete_skin": "Удалить наряд",
-  "skin.open_folder": "Открыть папку с одеждой",
-  "skin.are_you_sure": "Вы уверены, что хотите сменить одежду?",
-  "skin.are_you_sure_remove": "Вы уверены, что хотите удалить этот наряд?",
-  "skin.changeto": "Ваш текущий наряд будет изменен на",
-  "skin.classic": "Тип снаряжения: Классика",
-  "skin.slim": "Тип снаряжения: Тонкий",
-  "skin.download_skin": "Скачать Outfit",
-  "skin.invalid": "Неверный токен (перезапустить игру)",
-  "skin.long": "будет потеряно навсегда! (Долго!)"
+  "skin.change_skin": "Изменить скин",
+  "skin.delete_skin": "Удалить скин",
+  "skin.open_folder": "Открыть папку",
+  "skin.are_you_sure": "Вы уверены, что хотите сменить скин?",
+  "skin.are_you_sure_remove": "Вы уверены, что хотите удалить этот скин?",
+  "skin.changeto": "Ваш текущий скин будет изменён на",
+  "skin.classic": "Тип рук: обычные",
+  "skin.slim": "Тип рук: тонкие",
+  "skin.download_skin": "Загрузить скины",
+  "skin.invalid": "Неверный токен (перезапустите игру)",
+  "skin.long": "будет потерян навсегда! (это довольно долго)",
+
+  "skinswapper.midnightconfig.title":"Настройки Skin Swapper",
+
+  "skinswapper.midnightconfig.modButton":"Положение кнопки:",
+  "skinswapper.midnightconfig.enum.ModButton.LEFT":"Слева",
+  "skinswapper.midnightconfig.enum.ModButton.RIGHT":"Справа",
+  "skinswapper.midnightconfig.enum.ModButton.CENTER":"По центру",
+
+  "skinswapper.midnightconfig.displayType":"Отображение скина в меню: ",
+  "skinswapper.midnightconfig.enum.DisplayType.NEW":"3D",
+  "skinswapper.midnightconfig.enum.DisplayType.LEGACY":"2D",
+
+  "skinswapper.midnightconfig.showDownloadScreen":"Экран загрузки скинов по нику:"
 }
