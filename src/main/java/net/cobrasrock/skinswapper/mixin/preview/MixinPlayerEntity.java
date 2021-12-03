@@ -1,18 +1,18 @@
-package net.skinchange.mixin;
+package net.cobrasrock.skinswapper.mixin.preview;
 
+import net.cobrasrock.skinswapper.gui.SkinScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.entity.player.PlayerEntity;
-import net.skinchange.gui.SkinScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PlayerEntity.class)
+@Mixin(value = PlayerEntity.class, priority = 1100)
 public class MixinPlayerEntity {
 
-    //makes layers visible
+    //makes all layers visible
     @Inject(at = @At("HEAD"), method = "isPartVisible", cancellable = true)
     public void isPartVisible(PlayerModelPart modelPart, CallbackInfoReturnable<Boolean> cir){
         if(MinecraftClient.getInstance().currentScreen instanceof SkinScreen) {

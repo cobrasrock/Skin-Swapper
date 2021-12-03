@@ -1,8 +1,8 @@
-package net.skinchange;
+package net.cobrasrock.skinswapper;
 
 import net.fabricmc.api.ModInitializer;
-import net.skinchange.config.MidnightConfig;
-import net.skinchange.config.SkinSwapperConfig;
+import net.cobrasrock.skinswapper.config.MidnightConfig;
+import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 
 import java.io.File;
 

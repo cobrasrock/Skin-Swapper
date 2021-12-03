@@ -33,6 +33,7 @@ dependencies {
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 
+	//Multipart entity
 	include group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
 	implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.10'
 
@@ -44,6 +45,9 @@ dependencies {
 
 	//modmenu
 	modImplementation "curse.maven:${project.modmenu_version}"
+
+	//3d skin layers
+	modImplementation "curse.maven:${project.skinlayers_version}"
 }
 
 processResources {
@@ -75,28 +79,5 @@ java {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }

@@ -1,18 +1,18 @@
 {
   "required": true,
-  "package": "net.skinchange.mixin",
+  "package": "net.cobrasrock.skinswapper.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
   "client": [
     "MixinMultiplayerMenu",
     "MixinPlayerSkinProvider",
-    "AbstractClientPlayerEntityMixin",
-    "EntityRenderDispatcherMixin",
-    "LivingEntityRendererMixin",
-    "MixinPlayerEntity",
-    "ClientWorldMixin",
-    "PlayerListEntryMixin"
+
+    "preview.AbstractClientPlayerEntityMixin",
+    "preview.ClientWorldMixin",
+    "preview.LivingEntityRendererMixin",
+    "preview.MixinPlayerEntity",
+
+    "compatibility.skinlayers.ConfigAccessor",
+    "compatibility.skinlayers.PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

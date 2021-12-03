@@ -1,9 +1,9 @@
-package net.skinchange.mixin;
+package net.cobrasrock.skinswapper.mixin.preview;
 
+import net.cobrasrock.skinswapper.gui.SkinScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
-import net.skinchange.gui.SkinScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

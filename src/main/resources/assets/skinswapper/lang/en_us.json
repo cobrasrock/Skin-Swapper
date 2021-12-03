@@ -1,8 +1,6 @@
 {
   "skin.username": "Username:",
-  "skin.invalid_username": "Invalid Username",
   "skin.download": "Download",
-  "skin.no_internet": "No Internet Connection",
   "skin.change_skin": "Change Skin",
   "skin.delete_skin": "Delete Skin",
   "skin.open_folder": "Open Skin Folder",
@@ -14,6 +12,10 @@
   "skin.download_skin": "Download Skin",
   "skin.invalid": "Invalid Token(Restart Game)",
   "skin.long": "will be lost forever! (A long time!)",
+
+  "skin.error": "Error: ",
+  "skin.no_internet": "No Internet Connection",
+  "skin.invalid_username": "Invalid Username",
 
   "skinswapper.midnightconfig.title":"Skin Swapper Config",
 

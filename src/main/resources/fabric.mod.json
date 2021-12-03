@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Skin Swapper",
-  "description": "A mod that lets you change your skin in game.",
+  "description": "Lets you change your skin in game.",
   "authors": [
     "cobrasrock"
   ],
@@ -19,9 +19,9 @@
   "environment": "client",
   "entrypoints": {
     "main": [
-      "net.skinchange.SkinSwapper"
+      "net.cobrasrock.skinswapper.SkinSwapper"
     ],
-    "modmenu": [ "net.skinchange.config.ModMenuConfig" ]
+    "modmenu": [ "net.cobrasrock.skinswapper.config.ModMenuConfig" ]
   },
   "mixins": [
     "skinswapper.mixins.json"
