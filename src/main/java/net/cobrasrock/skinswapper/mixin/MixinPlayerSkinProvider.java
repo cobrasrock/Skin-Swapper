@@ -1,7 +1,9 @@
 package net.cobrasrock.skinswapper.mixin;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.InsecureTextureException;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.PlayerSkinProvider;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +20,15 @@ public class MixinPlayerSkinProvider{
 	//refreshes skin for singleplayer
 	@Inject(at = @At("HEAD"), method = "loadSkin(Lcom/mojang/authlib/GameProfile;Lnet/minecraft/client/texture/PlayerSkinProvider$SkinTextureAvailableCallback;Z)V")
 	private void loadSkin(GameProfile profile, PlayerSkinProvider.SkinTextureAvailableCallback callback, boolean requireSecure, CallbackInfo ci) {
-		if (sessionService.getTextures(profile, requireSecure).isEmpty()) {
-			sessionService.fillProfileProperties(profile, requireSecure);
+		if(MinecraftClient.getInstance().isInSingleplayer()) {
+			try {
+				if (sessionService.getTextures(profile, requireSecure).isEmpty()) {
+					sessionService.fillProfileProperties(profile, requireSecure);
+				}
+			} catch (InsecureTextureException ignored) {
+				//prevent crash
+			}
+
 		}
 	}
 }
