@@ -2,12 +2,11 @@ package net.cobrasrock.skinswapper;
 
 import net.cobrasrock.skinswapper.config.MidnightConfig;
 import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fmlclient.ConfigGuiHandler.ConfigGuiFactory;
-
 
 import java.io.File;
 
@@ -21,7 +20,7 @@ public class SkinSwapper {
 
         MidnightConfig.init("skinswapper", SkinSwapperConfig.class);
 
-        ModLoadingContext.get().registerExtensionPoint(ConfigGuiFactory.class, () -> new ConfigGuiFactory((mc, screen) -> MidnightConfig.getScreen(null, "skinswapper")));
+        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> MidnightConfig.getScreen(null, "skinswapper")));
 
         File file = new File("skins");
         file.mkdirs();
