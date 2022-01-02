@@ -1,5 +1,6 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "net.cobrasrock.skinswapper.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
@@ -12,7 +13,9 @@
     "preview.MixinPlayerEntity",
 
     "compatibility.skinlayers.ConfigAccessor",
-    "compatibility.skinlayers.PlayerEntityRendererMixin"
+    "compatibility.skinlayers.PlayerEntityRendererMixin",
+
+    "compatibility.forge.MixinPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1
