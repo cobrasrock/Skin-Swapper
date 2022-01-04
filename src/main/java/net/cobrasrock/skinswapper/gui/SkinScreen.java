@@ -1,5 +1,6 @@
 package net.cobrasrock.skinswapper.gui;
 
+import net.cobrasrock.skinswapper.Compatibility;
 import net.cobrasrock.skinswapper.SkinChangeHandler;
 import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.minecraft.client.MinecraftClient;
@@ -179,6 +180,8 @@ public class SkinScreen extends Screen {
                 SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
                 MinecraftClient.getInstance().setScreen(parent);
                 skinList.setSelected(null);
+
+                Compatibility.onOfflineSkinChange();
             }
             //online mode
             else {
