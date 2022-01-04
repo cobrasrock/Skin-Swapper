@@ -21,7 +21,9 @@
     "main": [
       "net.cobrasrock.skinswapper.SkinSwapper"
     ],
-    "modmenu": [ "net.cobrasrock.skinswapper.config.ModMenuConfig" ]
+    "modmenu": [
+      "net.cobrasrock.skinswapper.config.ModMenuConfig"
+    ]
   },
   "mixins": [
     "skinswapper.mixins.json"

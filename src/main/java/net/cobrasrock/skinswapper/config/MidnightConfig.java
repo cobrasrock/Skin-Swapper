@@ -4,9 +4,6 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -20,6 +17,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
+import java.io.File;
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -79,13 +77,13 @@ public class MidnightConfig {
     private static final Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).excludeFieldsWithModifiers(Modifier.PRIVATE).addSerializationExclusionStrategy(new HiddenAnnotationExclusionStrategy()).setPrettyPrinting().create();
 
     public static void init(String modid, Class<?> config) {
-        path = FabricLoader.getInstance().getConfigDir().resolve(modid + ".json");
+        path = new File("config" + File.separator + modid + ".json").toPath();
         configClass.put(modid, config);
 
         for (Field field : config.getFields()) {
             EntryInfo info = new EntryInfo();
             if (field.isAnnotationPresent(Entry.class) || field.isAnnotationPresent(Comment.class))
-                if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) initClient(modid, field, info);
+                initClient(modid, field, info);
             if (field.isAnnotationPresent(Entry.class))
                 try {
                     info.defaultValue = field.get(null);
@@ -103,7 +101,7 @@ public class MidnightConfig {
                 }
         }
     }
-    @Environment(EnvType.CLIENT)
+
     private static void initClient(String modid, Field field, EntryInfo info) {
         Class<?> type = field.getType();
         Entry e = field.getAnnotation(Entry.class);
@@ -168,19 +166,20 @@ public class MidnightConfig {
     }
 
     public static void write(String modid) {
-        path = FabricLoader.getInstance().getConfigDir().resolve(modid + ".json");
+        path = new File("config" + File.separator + modid + ".json").toPath();
         try {
             if (!Files.exists(path)) Files.createFile(path);
+
             Files.write(path, gson.toJson(configClass.get(modid).getDeclaredConstructor().newInstance()).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    @Environment(EnvType.CLIENT)
+
     public static Screen getScreen(Screen parent, String modid) {
         return new MidnightConfigScreen(parent, modid);
     }
-    @Environment(EnvType.CLIENT)
+
     private static class MidnightConfigScreen extends Screen {
 
         protected MidnightConfigScreen(Screen parent, String modid) {
@@ -296,7 +295,7 @@ public class MidnightConfig {
             super.render(matrices,mouseX,mouseY,delta);
         }
     }
-    @Environment(EnvType.CLIENT)
+
     public static class MidnightConfigListWidget extends ElementListWidget<MidnightConfig.ButtonEntry> {
         TextRenderer textRenderer;
 

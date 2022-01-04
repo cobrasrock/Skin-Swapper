@@ -13,11 +13,6 @@ public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
         this.parent = parent;
     }
 
-    public void select(SkinEntry entry)
-    {
-        this.setSelected(entry);
-    }
-
     @Override
     protected int getScrollbarPositionX()
     {

@@ -1,5 +1,6 @@
 package net.cobrasrock.skinswapper.gui;
 
+import net.cobrasrock.skinswapper.SkinChangeHandler;
 import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -18,7 +19,7 @@ import java.io.File;
 
 public class SkinScreen extends Screen {
     final File folder;
-    private final Screen parent;
+    public final Screen parent;
     private static SkinListWidget skinList;
     public String error;
 
@@ -30,7 +31,6 @@ public class SkinScreen extends Screen {
 
     @Override
     protected void init() {
-
         //lists skins
         skinList = new SkinListWidget(this.client, this.width/2, this.height, 36, this.height - 52, 36, this);
         skinList.setLeftPos(0);
@@ -46,12 +46,12 @@ public class SkinScreen extends Screen {
 
         //change skin button
         this.addDrawableChild(new ButtonWidget(((this.width - (this.width/4)) - 100 - 2), this.height - 24, 100, 20, new TranslatableText("skin.change_skin"), button -> {
-            this.client.setScreen(new ConfirmScreen(this::changeSkin, new LiteralText(I18n.translate("skin.are_you_sure")), new LiteralText(I18n.translate("skin.changeto") + " '" + skinList.getFocused().fname + "'"), new TranslatableText("gui.yes"), new TranslatableText("gui.cancel")));
+            this.client.setScreen(new ConfirmScreen(this::changeSkin, new LiteralText(I18n.translate("skin.are_you_sure")), new LiteralText(I18n.translate("skin.changeto") + " '" + getSelected().fname + "'"), new TranslatableText("gui.yes"), new TranslatableText("gui.cancel")));
         }) {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                active = (skinList.getFocused() != null);
+                active = (getSelected() != null);
                 super.render(matrices, var1, var2, var3);
             }
         });
@@ -62,32 +62,32 @@ public class SkinScreen extends Screen {
         //delete skin button
         this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 24, 100, 20, new TranslatableText("skin.delete_skin"), button ->
         {
-            this.client.setScreen(new ConfirmScreen(this::removeEntry, new LiteralText(I18n.translate("skin.are_you_sure_remove")), new LiteralText("'" + skinList.getFocused().fname + "' " + I18n.translate("skin.long")), new TranslatableText("selectWorld.delete"), new TranslatableText("gui.cancel")));
+            this.client.setScreen(new ConfirmScreen(this::removeEntry, new LiteralText(I18n.translate("skin.are_you_sure_remove")), new LiteralText("'" + getSelected().fname + "' " + I18n.translate("skin.long")), new TranslatableText("selectWorld.delete"), new TranslatableText("gui.cancel")));
         }) {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                active = (skinList.getFocused() != null);
+                active = (getSelected() != null);
                 super.render(matrices, var1, var2, var3);
             }
         });
 
         //classic select button
-        this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 48, 100, 20, new TranslatableText("skin.classic"), button -> skinList.getFocused().toggleSkinType()) {
+        this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 48, 100, 20, new TranslatableText("skin.classic"), button -> getSelected().toggleSkinType()) {
             @Override //sets button to be active only if a skin is selected and slim
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                active = (skinList.getFocused() != null && skinList.getFocused().skinType.equals(SkinType.SLIM));
+                active = (getSelected() != null && getSelected().skinType.equals(SkinType.SLIM));
                 super.render(matrices, var1, var2, var3);
             }
         });
 
         //slim select button
-        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 48, 100, 20, new TranslatableText("skin.slim"), button -> skinList.getFocused().toggleSkinType()) {
+        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 48, 100, 20, new TranslatableText("skin.slim"), button -> getSelected().toggleSkinType()) {
             @Override //sets button to be active only if a skin is selected and classic
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                active = (skinList.getFocused() != null && skinList.getFocused().skinType.equals(SkinType.CLASSIC));
+                active = (getSelected() != null && getSelected().skinType.equals(SkinType.CLASSIC));
                 super.render(matrices, var1, var2, var3);
             }
         });
@@ -100,28 +100,28 @@ public class SkinScreen extends Screen {
         //refresh button
         this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 8, 100, 20, new TranslatableText("selectServer.refresh"), button -> {
             addSkins(folder);
-            skinList.setFocused(null);
+            skinList.setSelected(null);
             error = "";
         }));
     }
 
-    public void render(MatrixStack matrices,  int mouseX, int mouseY, float delta)
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        this.renderBackground(matrices);
+        this.renderBackgroundTexture(0);
         skinList.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
 
         //draws skin preview
-        if(skinList.getFocused() != null) {
+        if(getSelected() != null) {
             //draws 2d skin
             if (SkinSwapperConfig.displayType == SkinSwapperConfig.DisplayType.LEGACY) {
                 try {
-                    SkinUtils.drawSkin(this.width - skinList.getRowWidth() / 2 - 16, this.height / 2 - 64, matrices, skinList.getFocused());
+                    SkinUtils.drawSkin(this.width - skinList.getRowWidth() / 2 - 16, this.height / 2 - 64, matrices, getSelected());
                 } catch (Exception ignored) {}
             }
             //draws 3d skin
             else {
-                if (skinList.getFocused() != null) {
+                if (getSelected() != null) {
                     try {
                         SkinUtils.drawPlayer(this.width - (this.width / 4), this.height - 36, 92, mouseX, mouseY);
                     } catch (Exception e) {
@@ -161,27 +161,39 @@ public class SkinScreen extends Screen {
 
     private void removeEntry(boolean confirmedAction) {
         if(confirmedAction) {
-            skinList.getFocused().deleteSkin();
-            skinList.children().remove(skinList.getFocused());
+            getSelected().deleteSkin();
+            skinList.children().remove(getSelected());
             skinList.setSelected(null);
         }
         this.client.setScreen(this);
     }
 
     public static SkinEntry getSelected(){
-        return skinList.getFocused();
+        return skinList.getSelectedOrNull();
     }
 
     private void changeSkin(boolean confirmedAction) {
         if(confirmedAction) {
-            if(SkinChange.changeSkin(skinList.getFocused().skin_file, skinList.getFocused().skinType, this)) {
-                skinList.setSelected(null);
+            //offline mode
+            if(SkinSwapperConfig.offlineMode){
+                SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
                 MinecraftClient.getInstance().setScreen(parent);
+                skinList.setSelected(null);
             }
+            //online mode
             else {
-                this.client.setScreen(this);
+                if (SkinChange.changeSkin(getSelected().skin_file, getSelected().skinType, this)) {
+                    skinList.setSelected(null);
+                    SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
+                    MinecraftClient.getInstance().setScreen(parent);
+                }
+                //skin fails to change
+                else {
+                    this.client.setScreen(this);
+                }
             }
         }
+        //user does not confirm action
         else {
             this.client.setScreen(this);
         }

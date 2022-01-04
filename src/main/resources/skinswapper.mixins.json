@@ -4,15 +4,15 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinMultiplayerMenu",
-    "MixinPlayerSkinProvider",
-
+    "MixinPlayerListEntry",
+    "compatibility.skinlayers.ConfigAccessor",
+    "preview.PlayerEntityRendererMixin",
     "preview.AbstractClientPlayerEntityMixin",
     "preview.ClientWorldMixin",
     "preview.LivingEntityRendererMixin",
-    "preview.MixinPlayerEntity",
-
-    "compatibility.skinlayers.ConfigAccessor",
-    "compatibility.skinlayers.PlayerEntityRendererMixin"
+    "offline.MixinSingleplayerMenu",
+    "offline.MixinMinecraftClient",
+    "offline.MixinSkinMenu"
   ],
   "injectors": {
     "defaultRequire": 1

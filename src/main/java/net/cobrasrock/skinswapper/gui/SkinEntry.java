@@ -64,7 +64,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
 
     @Override
     public boolean mouseClicked(double v, double v1, int i) {
-        list.select(this);
+        list.setSelected(this);
 		return true;
     }
 
