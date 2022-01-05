@@ -29,15 +29,29 @@ public class MixinPlayerListEntry {
     @Inject(at = @At("HEAD"), method = "loadTextures", cancellable = true)
     private void loadTextures(CallbackInfo ci){
 
-        //sets skin when launching game
-        if(!SkinChangeHandler.isInitialized() && SkinSwapperConfig.offlineMode) {
-            SkinChangeHandler.initializeSkin();
-        }
+        if(profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId())) {
+            //sets skin when changing settings
+            if(SkinChangeHandler.isSettingsChanged()){
+                SkinChangeHandler.initialized = false;
+            }
 
-        //sets offline skin
-        if(SkinChangeHandler.isSkinChanged() && profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId())) {
-            textures.put(MinecraftProfileTexture.Type.SKIN, SkinChangeHandler.getSkinId());
-            model = SkinChangeHandler.getSkinType();
+            //sets skin when switching world
+            if(textures.get(MinecraftProfileTexture.Type.SKIN) == null) {
+                SkinChangeHandler.initializeSkin();
+            }
+
+            //sets skin when launching game
+            if(!SkinChangeHandler.initialized) {
+                SkinChangeHandler.initializeSkin();
+            }
+
+            //loads skin
+            if(SkinChangeHandler.skinChanged) {
+                textures.put(MinecraftProfileTexture.Type.SKIN, SkinChangeHandler.skinId);
+                model = SkinChangeHandler.skinType;
+                SkinChangeHandler.skinChanged = false;
+            }
+
             ci.cancel();
         }
     }
