@@ -33,7 +33,8 @@ public class SkinScreen extends Screen {
     @Override
     protected void init() {
         //lists skins
-        skinList = new SkinListWidget(this.client, this.width/2, this.height, 36, this.height - 52, 36, this);
+        int topY = SkinSwapperConfig.offlineModeToggle ? 52 : 36;
+        skinList = new SkinListWidget(this.client, this.width/2, this.height, topY, this.height - 52, 36, this);
         skinList.setLeftPos(0);
         this.addSelectableChild(skinList);
 
@@ -93,17 +94,41 @@ public class SkinScreen extends Screen {
             }
         });
 
+        int topRowY = SkinSwapperConfig.offlineModeToggle ? 4 : 8;
+
         //download button
         if (SkinSwapperConfig.showDownloadScreen) {
-            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, 8, 100, 20, new TranslatableText("skin.download_skin"), button -> MinecraftClient.getInstance().setScreen(new DownloadScreen(this))));
+            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, topRowY, 100, 20, new TranslatableText("skin.download_skin"), button -> MinecraftClient.getInstance().setScreen(new DownloadScreen(this))));
         }
 
         //refresh button
-        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 8, 100, 20, new TranslatableText("selectServer.refresh"), button -> {
+        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, topRowY, 100, 20, new TranslatableText("selectServer.refresh"), button -> {
             addSkins(folder);
             skinList.setSelected(null);
             error = "";
         }));
+
+        if(SkinSwapperConfig.offlineModeToggle){
+            //online select button
+            this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 28, 100, 20, new TranslatableText("skin.online"), button -> SkinSwapperConfig.toggleOffline()) {
+                @Override
+                public void render(MatrixStack matrices, int var1, int var2, float var3) {
+                    visible = true;
+                    active = SkinSwapperConfig.offlineMode;
+                    super.render(matrices, var1, var2, var3);
+                }
+            });
+
+            //offline select button
+            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, 28, 100, 20, new TranslatableText("skin.offline"), button -> SkinSwapperConfig.toggleOffline()) {
+                @Override
+                public void render(MatrixStack matrices, int var1, int var2, float var3) {
+                    visible = true;
+                    active = !SkinSwapperConfig.offlineMode;
+                    super.render(matrices, var1, var2, var3);
+                }
+            });
+        }
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)

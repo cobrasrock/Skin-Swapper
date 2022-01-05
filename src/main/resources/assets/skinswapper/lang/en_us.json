@@ -12,6 +12,8 @@
   "skin.download_skin": "Download Skin",
   "skin.invalid": "Invalid Token(Restart Game)",
   "skin.long": "will be lost forever! (A long time!)",
+  "skin.online": "Online",
+  "skin.offline": "Offline",
 
   "skin.error": "Error: ",
   "skin.no_internet": "No Internet Connection",
@@ -29,5 +31,6 @@
   "skinswapper.midnightconfig.enum.DisplayType.LEGACY":"2d",
 
   "skinswapper.midnightconfig.showDownloadScreen":"Show Download Screen:",
+  "skinswapper.midnightconfig.offlineModeToggle":"Show Offline Mode Toggle:",
   "skinswapper.midnightconfig.offlineMode":"Offline Mode:"
 }

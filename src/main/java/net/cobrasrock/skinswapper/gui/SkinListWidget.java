@@ -7,9 +7,9 @@ public class SkinListWidget extends AlwaysSelectedEntryListWidget<SkinEntry>
 {
     SkinScreen parent;
 
-    public SkinListWidget(MinecraftClient minecraftClient, int i, int j, int k, int l, int m, SkinScreen parent)
+    public SkinListWidget(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight, SkinScreen parent)
     {
-        super(minecraftClient, i, j, k, l, m);
+        super(client, width, height, top, bottom, itemHeight);
         this.parent = parent;
     }
 

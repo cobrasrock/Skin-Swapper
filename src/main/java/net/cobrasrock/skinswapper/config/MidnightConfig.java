@@ -56,7 +56,7 @@ public class MidnightConfig {
     private static final Pattern INTEGER_ONLY = Pattern.compile("(-?[0-9]*)");
     private static final Pattern DECIMAL_ONLY = Pattern.compile("-?([\\d]+\\.?[\\d]*|[\\d]*\\.?[\\d]+|\\.)");
 
-    private static final List<EntryInfo> entries = new ArrayList<>();
+    public static final List<EntryInfo> entries = new ArrayList<>();
 
     protected static class EntryInfo {
         Field field;
