@@ -53,7 +53,18 @@ public class SkinScreen extends Screen {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                active = (getSelected() != null);
+                //sets active
+                if(SkinSwapperConfig.offlineModeToggle && (!client.isInSingleplayer() && client.world != null)){
+                    if(!SkinSwapperConfig.offlineMode){
+                        active = false;
+                    }
+                    else {
+                        active = (getSelected() != null);
+                    }
+                }
+                else {
+                    active = (getSelected() != null);
+                }
                 super.render(matrices, var1, var2, var3);
             }
         });
@@ -205,15 +216,15 @@ public class SkinScreen extends Screen {
                 SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
                 MinecraftClient.getInstance().setScreen(parent);
                 skinList.setSelected(null);
-
                 Compatibility.onOfflineSkinChange();
             }
             //online mode
             else {
                 if (SkinChange.changeSkin(getSelected().skin_file, getSelected().skinType, this)) {
-                    skinList.setSelected(null);
                     SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
                     MinecraftClient.getInstance().setScreen(parent);
+                    skinList.setSelected(null);
+                    Compatibility.onOfflineSkinChange();
                 }
                 //skin fails to change
                 else {

@@ -93,18 +93,18 @@ public class SkinChangeHandler {
             //loads from mojang
             try {
                 GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
-
                 profile.getProperties().clear();
-                profile.getProperties().putAll(MinecraftClient.getInstance().getSessionProperties());
-                Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = MinecraftClient.getInstance().getSessionService().getTextures(profile, false);
+                MinecraftClient.getInstance().getSessionService().fillProfileProperties(profile, true);
 
+                Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = MinecraftClient.getInstance().getSkinProvider().getTextures(profile);
                 MinecraftProfileTexture profileTexture = map.get(MinecraftProfileTexture.Type.SKIN);
+
                 skinType = profileTexture.getMetadata("model");
                 skinId = MinecraftClient.getInstance().getSkinProvider().loadSkin(profileTexture, MinecraftProfileTexture.Type.SKIN);
             }
 
             //failed to get skin, loads default
-            catch (Exception ignored){
+            catch (Exception e){
                 GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
                 skinId = DefaultSkinHelper.getTexture(profile.getId());
                 skinType = DefaultSkinHelper.getModel(profile.getId());

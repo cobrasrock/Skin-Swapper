@@ -27,7 +27,7 @@ public class MixinSkinMenu extends GameOptionsScreen {
 
     @Inject(at = @At("RETURN"), method = "init")
     private void init(CallbackInfo info) {
-        if(SkinSwapperConfig.offlineMode || MinecraftClient.getInstance().world == null) {
+        if((SkinSwapperConfig.offlineMode || SkinSwapperConfig.offlineModeToggle) || MinecraftClient.getInstance().world == null) {
             //gets button x-coordinate
             int buttonX;
             if (SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.LEFT) {
@@ -51,7 +51,7 @@ public class MixinSkinMenu extends GameOptionsScreen {
     //hides text which can block the button
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/option/SkinOptionsScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), method = "render")
     private void render(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color){
-        if (!(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.CENTER && (SkinSwapperConfig.offlineMode || MinecraftClient.getInstance().world == null))) {
+        if (!(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.CENTER && ((SkinSwapperConfig.offlineMode || SkinSwapperConfig.offlineModeToggle) || MinecraftClient.getInstance().world == null))) {
             drawCenteredText(matrices, textRenderer, text, centerX, y, color);
         }
     }

@@ -25,7 +25,7 @@ public class MixinSingleplayerMenu extends Screen {
 
     @Inject(at = @At("RETURN"), method = "init")
     private void init(CallbackInfo info) {
-        if(SkinSwapperConfig.offlineMode) {
+        if(SkinSwapperConfig.offlineMode || SkinSwapperConfig.offlineModeToggle) {
             //gets button x-coordinate
             int buttonX;
             int buttonY;
@@ -54,7 +54,7 @@ public class MixinSingleplayerMenu extends Screen {
     //hides singleplayer text which can block the button
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/world/SelectWorldScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), method = "render")
     private void render(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color){
-        if (!(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.CENTER && SkinSwapperConfig.offlineMode)) {
+        if (!(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.CENTER && (SkinSwapperConfig.offlineMode || SkinSwapperConfig.offlineModeToggle))) {
             drawCenteredText(matrices, textRenderer, text, centerX, y, color);
         }
     }
