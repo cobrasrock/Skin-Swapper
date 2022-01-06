@@ -3,16 +3,16 @@
   "package": "net.cobrasrock.skinswapper.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "MixinMultiplayerMenu",
+    "menu.MixinMultiplayerMenu",
     "MixinPlayerListEntry",
     "compatibility.skinlayers.ConfigAccessor",
     "preview.PlayerEntityRendererMixin",
     "preview.AbstractClientPlayerEntityMixin",
     "preview.ClientWorldMixin",
     "preview.LivingEntityRendererMixin",
-    "offline.MixinSingleplayerMenu",
-    "offline.MixinMinecraftClient",
-    "offline.MixinSkinMenu"
+    "menu.MixinSingleplayerMenu",
+    "MixinMinecraftClient",
+    "menu.MixinSkinMenu"
   ],
   "injectors": {
     "defaultRequire": 1

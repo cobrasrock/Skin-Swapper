@@ -2,21 +2,35 @@ package net.cobrasrock.skinswapper.config;
 
 public class SkinSwapperConfig extends MidnightConfig {
 
-    @Entry public static ModButton modButton = ModButton.LEFT;
-    public enum ModButton {
-        LEFT, RIGHT, CENTER
-    }
+    //General Options
+    @Comment public static Comment generalOptions;
 
     @Entry public static DisplayType displayType = DisplayType.NEW;
     public enum DisplayType {
         NEW ,LEGACY
     }
 
+    @Entry public static boolean forceRelog = false;
+
     @Entry public static boolean showDownloadScreen = true;
+
+    //Offline Mode
+    @Comment public static Comment offlineModeOptions;
+
+    @Entry public static boolean offlineMode = false;
 
     @Entry public static boolean offlineModeToggle = false;
 
-    @Entry public static boolean offlineMode = false;
+    //Button Location
+    @Comment public static Comment buttonLocationOptions;
+
+    @Entry public static ModButton skinOptionsButton = ModButton.CENTER;
+    @Entry public static ModButton multiplayerButton = ModButton.LEFT;
+    @Entry public static ModButton singleplayerButton = ModButton.OFF;
+
+    public enum ModButton {
+        LEFT, RIGHT, CENTER, OFF
+    }
 
     //changes setting
     public static void toggleOffline(){

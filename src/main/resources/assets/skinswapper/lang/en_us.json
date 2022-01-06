@@ -21,16 +21,23 @@
 
   "skinswapper.midnightconfig.title":"Skin Swapper Config",
 
-  "skinswapper.midnightconfig.modButton":"Button Location:",
+  "skinswapper.midnightconfig.generalOptions":"General Options",
+  "skinswapper.midnightconfig.displayType":"Skin Menu Render Type:",
+  "skinswapper.midnightconfig.enum.DisplayType.NEW":"3d",
+  "skinswapper.midnightconfig.enum.DisplayType.LEGACY":"2d",
+  "skinswapper.midnightconfig.showDownloadScreen":"Show Download Screen:",
+  "skinswapper.midnightconfig.forceRelog":"Force Re-Log:",
+
+  "skinswapper.midnightconfig.offlineModeOptions":"Offline Mode Options",
+  "skinswapper.midnightconfig.offlineMode":"Enable Offline Mode:",
+  "skinswapper.midnightconfig.offlineModeToggle":"Show Offline Mode Toggle:",
+
+  "skinswapper.midnightconfig.buttonLocationOptions":"Button Location Options",
+  "skinswapper.midnightconfig.skinOptionsButton":"Skin Options Menu:",
+  "skinswapper.midnightconfig.multiplayerButton":"Multiplayer Menu:",
+  "skinswapper.midnightconfig.singleplayerButton":"Singleplayer Menu:",
   "skinswapper.midnightconfig.enum.ModButton.LEFT":"Left",
   "skinswapper.midnightconfig.enum.ModButton.RIGHT":"Right",
   "skinswapper.midnightconfig.enum.ModButton.CENTER":"Center",
-
-  "skinswapper.midnightconfig.displayType":"Skin Menu Render Type: ",
-  "skinswapper.midnightconfig.enum.DisplayType.NEW":"3d",
-  "skinswapper.midnightconfig.enum.DisplayType.LEGACY":"2d",
-
-  "skinswapper.midnightconfig.showDownloadScreen":"Show Download Screen:",
-  "skinswapper.midnightconfig.offlineModeToggle":"Show Offline Mode Toggle:",
-  "skinswapper.midnightconfig.offlineMode":"Offline Mode:"
+  "skinswapper.midnightconfig.enum.ModButton.OFF":"Off"
 }

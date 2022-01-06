@@ -3,6 +3,7 @@ package net.cobrasrock.skinswapper.gui;
 import net.cobrasrock.skinswapper.Compatibility;
 import net.cobrasrock.skinswapper.SkinChangeHandler;
 import net.cobrasrock.skinswapper.changeskin.SkinChange;
+import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -14,7 +15,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
-import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 
 import java.io.File;
 
@@ -54,8 +54,8 @@ public class SkinScreen extends Screen {
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
                 //sets active
-                if(SkinSwapperConfig.offlineModeToggle && (!client.isInSingleplayer() && client.world != null)){
-                    if(!SkinSwapperConfig.offlineMode){
+                if(MinecraftClient.getInstance().world != null){
+                    if(!SkinSwapperConfig.offlineMode && !SkinSwapperConfig.forceRelog && !MinecraftClient.getInstance().isInSingleplayer()){
                         active = false;
                     }
                     else {
@@ -225,6 +225,10 @@ public class SkinScreen extends Screen {
                     MinecraftClient.getInstance().setScreen(parent);
                     skinList.setSelected(null);
                     Compatibility.onOfflineSkinChange();
+
+                    if(SkinSwapperConfig.forceRelog) {
+                        SkinChangeHandler.changeOnServer();
+                    }
                 }
                 //skin fails to change
                 else {

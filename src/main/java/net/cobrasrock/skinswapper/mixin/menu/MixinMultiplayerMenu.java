@@ -1,4 +1,4 @@
-package net.cobrasrock.skinswapper.mixin;
+package net.cobrasrock.skinswapper.mixin.menu;
 
 import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 import net.cobrasrock.skinswapper.gui.SkinScreen;
@@ -26,12 +26,14 @@ public class MixinMultiplayerMenu extends Screen {
 	private void init(CallbackInfo info) {
 		//gets button x-coordinate
 		int buttonX;
-		if(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.LEFT){
+		if(SkinSwapperConfig.multiplayerButton == SkinSwapperConfig.ModButton.LEFT){
 			buttonX = 25;
-		} else if(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.RIGHT){
+		} else if(SkinSwapperConfig.multiplayerButton == SkinSwapperConfig.ModButton.RIGHT){
 			buttonX = this.width - 125;
-		} else {
+		} else if(SkinSwapperConfig.multiplayerButton == SkinSwapperConfig.ModButton.CENTER){
 			buttonX = (this.width/2) - 50;
+		} else {
+			return;
 		}
 
 		//draws change skin button
@@ -46,8 +48,8 @@ public class MixinMultiplayerMenu extends Screen {
 	//hides multiplayer text which can block the button
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), method = "render")
 	private void render(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color){
-		if(!(SkinSwapperConfig.modButton == SkinSwapperConfig.ModButton.CENTER)){
-			drawCenteredText(matrices,textRenderer,text,centerX,y,color);
+		if(!(SkinSwapperConfig.multiplayerButton == SkinSwapperConfig.ModButton.CENTER)){
+			drawCenteredText(matrices, textRenderer, text, centerX, y, color);
 		}
 	}
 }

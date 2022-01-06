@@ -1,4 +1,4 @@
-package net.cobrasrock.skinswapper.mixin.offline;
+package net.cobrasrock.skinswapper.mixin;
 
 import net.cobrasrock.skinswapper.gui.SkinScreen;
 import net.minecraft.client.MinecraftClient;

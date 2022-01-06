@@ -6,13 +6,21 @@ import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 import net.cobrasrock.skinswapper.gui.SkinType;
 import net.cobrasrock.skinswapper.gui.SkinUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.NetworkState;
+import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
+import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.util.Map;
 
@@ -100,6 +108,9 @@ public class SkinChangeHandler {
                 MinecraftProfileTexture profileTexture = map.get(MinecraftProfileTexture.Type.SKIN);
 
                 skinType = profileTexture.getMetadata("model");
+                if(skinType == null){
+                    skinType = "default";
+                }
                 skinId = MinecraftClient.getInstance().getSkinProvider().loadSkin(profileTexture, MinecraftProfileTexture.Type.SKIN);
             }
 
@@ -127,5 +138,22 @@ public class SkinChangeHandler {
         else {
             return false;
         }
+    }
+
+    //refreshes skin server side by relogging
+    public static void changeOnServer(){
+        try {
+            if(!MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().world != null) {
+
+                InetSocketAddress address = (InetSocketAddress)MinecraftClient.getInstance().getNetworkHandler().getConnection().getAddress();
+                String hostname = address.getHostName();
+                int port = address.getPort();
+
+                ClientConnection connection = ClientConnection.connect(address, MinecraftClient.getInstance().options.shouldUseNativeTransport());
+                connection.setPacketListener(new ClientLoginNetworkHandler(connection, MinecraftClient.getInstance(), new MultiplayerScreen(new TitleScreen()), System.out::println));
+                connection.send(new HandshakeC2SPacket(hostname, port, NetworkState.LOGIN));
+                connection.send(new LoginHelloC2SPacket(MinecraftClient.getInstance().getSession().getProfile()));
+            }
+        } catch (Exception ignored){}
     }
 }
