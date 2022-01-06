@@ -53,18 +53,7 @@ public class SkinScreen extends Screen {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
-                //sets active
-                if(MinecraftClient.getInstance().world != null){
-                    if(!SkinSwapperConfig.offlineMode && !SkinSwapperConfig.forceRelog && !MinecraftClient.getInstance().isInSingleplayer()){
-                        active = false;
-                    }
-                    else {
-                        active = (getSelected() != null);
-                    }
-                }
-                else {
-                    active = (getSelected() != null);
-                }
+                active = (getSelected() != null);
                 super.render(matrices, var1, var2, var3);
             }
         });

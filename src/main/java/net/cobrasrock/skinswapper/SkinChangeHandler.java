@@ -16,6 +16,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -145,14 +146,17 @@ public class SkinChangeHandler {
         try {
             if(!MinecraftClient.getInstance().isInSingleplayer() || MinecraftClient.getInstance().world != null) {
 
-                InetSocketAddress address = (InetSocketAddress)MinecraftClient.getInstance().getNetworkHandler().getConnection().getAddress();
+                ClientConnection connection = MinecraftClient.getInstance().getNetworkHandler().getConnection();
+                InetSocketAddress address = (InetSocketAddress)connection.getAddress();
                 String hostname = address.getHostName();
                 int port = address.getPort();
 
-                ClientConnection connection = ClientConnection.connect(address, MinecraftClient.getInstance().options.shouldUseNativeTransport());
-                connection.setPacketListener(new ClientLoginNetworkHandler(connection, MinecraftClient.getInstance(), new MultiplayerScreen(new TitleScreen()), System.out::println));
-                connection.send(new HandshakeC2SPacket(hostname, port, NetworkState.LOGIN));
-                connection.send(new LoginHelloC2SPacket(MinecraftClient.getInstance().getSession().getProfile()));
+                if(!Compatibility.onOnlineSkinChange(hostname, port)) {
+                    connection = ClientConnection.connect(address, MinecraftClient.getInstance().options.shouldUseNativeTransport());
+                    connection.setPacketListener(new ClientLoginNetworkHandler(connection, MinecraftClient.getInstance(), new MultiplayerScreen(new TitleScreen()), (Text text) -> {}));
+                    connection.send(new HandshakeC2SPacket(hostname, port, NetworkState.LOGIN));
+                    connection.send(new LoginHelloC2SPacket(MinecraftClient.getInstance().getSession().getProfile()));
+                }
             }
         } catch (Exception ignored){}
     }
