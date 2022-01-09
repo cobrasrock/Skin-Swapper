@@ -1,7 +1,7 @@
 package net.cobrasrock.skinswapper.gui;
 
 import net.cobrasrock.skinswapper.Compatibility;
-import net.cobrasrock.skinswapper.SkinChangeHandler;
+import net.cobrasrock.skinswapper.SkinChangeManager;
 import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 import net.minecraft.client.MinecraftClient;
@@ -202,7 +202,7 @@ public class SkinScreen extends Screen {
         if(confirmedAction) {
             //offline mode
             if(SkinSwapperConfig.offlineMode){
-                SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
+                SkinChangeManager.onSkinChange(getSelected().skinType, getSelected().skin_file);
                 MinecraftClient.getInstance().setScreen(parent);
                 skinList.setSelected(null);
                 Compatibility.onOfflineSkinChange();
@@ -210,13 +210,13 @@ public class SkinScreen extends Screen {
             //online mode
             else {
                 if (SkinChange.changeSkin(getSelected().skin_file, getSelected().skinType, this)) {
-                    SkinChangeHandler.onSkinChange(getSelected().skinType, getSelected().skin_file);
+                    SkinChangeManager.onSkinChange(getSelected().skinType, getSelected().skin_file);
                     MinecraftClient.getInstance().setScreen(parent);
                     skinList.setSelected(null);
                     Compatibility.onOfflineSkinChange();
 
                     if(SkinSwapperConfig.forceRelog) {
-                        SkinChangeHandler.changeOnServer();
+                        SkinChangeManager.changeOnServer();
                     }
                 }
                 //skin fails to change

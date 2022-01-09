@@ -2,8 +2,7 @@ package net.cobrasrock.skinswapper.mixin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import net.cobrasrock.skinswapper.SkinChangeHandler;
-import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
+import net.cobrasrock.skinswapper.SkinChangeManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.Identifier;
@@ -31,25 +30,25 @@ public class MixinPlayerListEntry {
 
         if(profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId())) {
             //sets skin when changing settings
-            if(SkinChangeHandler.isSettingsChanged()){
-                SkinChangeHandler.initialized = false;
+            if(SkinChangeManager.isSettingsChanged()){
+                SkinChangeManager.initialized = false;
             }
 
             //sets skin when switching world
             if(textures.get(MinecraftProfileTexture.Type.SKIN) == null) {
-                SkinChangeHandler.initializeSkin();
+                SkinChangeManager.initializeSkin();
             }
 
             //sets skin when launching game
-            if(!SkinChangeHandler.initialized) {
-                SkinChangeHandler.initializeSkin();
+            if(!SkinChangeManager.initialized) {
+                SkinChangeManager.initializeSkin();
             }
 
             //loads skin
-            if(SkinChangeHandler.skinChanged) {
-                textures.put(MinecraftProfileTexture.Type.SKIN, SkinChangeHandler.skinId);
-                model = SkinChangeHandler.skinType;
-                SkinChangeHandler.skinChanged = false;
+            if(SkinChangeManager.skinChanged) {
+                textures.put(MinecraftProfileTexture.Type.SKIN, SkinChangeManager.skinId);
+                model = SkinChangeManager.skinType;
+                SkinChangeManager.skinChanged = false;
             }
 
             ci.cancel();

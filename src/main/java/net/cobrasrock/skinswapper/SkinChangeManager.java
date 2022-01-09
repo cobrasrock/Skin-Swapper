@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-public class SkinChangeHandler {
+public class SkinChangeManager {
     public static boolean skinChanged;
     public static String skinType;
     public static Identifier skinId;
@@ -94,7 +94,7 @@ public class SkinChangeHandler {
             }
 
             //schedules skin change
-            SkinChangeHandler.onSkinChange(skinType, skinFile);
+            SkinChangeManager.onSkinChange(skinType, skinFile);
             initialized = true;
         }
 
@@ -117,6 +117,10 @@ public class SkinChangeHandler {
 
             //failed to get skin, loads default
             catch (Exception e){
+                //todo remove for stable
+                System.out.println("Error Loading Skin:");
+                e.printStackTrace();
+
                 GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
                 skinId = DefaultSkinHelper.getTexture(profile.getId());
                 skinType = DefaultSkinHelper.getModel(profile.getId());
