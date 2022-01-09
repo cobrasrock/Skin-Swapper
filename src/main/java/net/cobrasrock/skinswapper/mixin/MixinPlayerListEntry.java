@@ -31,16 +31,11 @@ public class MixinPlayerListEntry {
         if(profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId())) {
             //sets skin when changing settings
             if(SkinChangeManager.isSettingsChanged()){
-                SkinChangeManager.initialized = false;
+                SkinChangeManager.initializeSkin();
             }
 
             //sets skin when switching world
             if(textures.get(MinecraftProfileTexture.Type.SKIN) == null) {
-                SkinChangeManager.initializeSkin();
-            }
-
-            //sets skin when launching game
-            if(!SkinChangeManager.initialized) {
                 SkinChangeManager.initializeSkin();
             }
 

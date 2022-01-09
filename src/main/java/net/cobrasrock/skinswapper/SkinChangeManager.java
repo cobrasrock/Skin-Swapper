@@ -18,6 +18,7 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,6 @@ public class SkinChangeManager {
     public static boolean skinChanged;
     public static String skinType;
     public static Identifier skinId;
-    public static boolean initialized = false;
     private static boolean wasOfflineMode = SkinSwapperConfig.offlineMode;
 
     public static void onSkinChange(SkinType type, File skinFile){
@@ -95,41 +95,41 @@ public class SkinChangeManager {
 
             //schedules skin change
             SkinChangeManager.onSkinChange(skinType, skinFile);
-            initialized = true;
         }
 
         else {
             //loads from mojang
-            try {
-                GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
-                profile.getProperties().clear();
-                MinecraftClient.getInstance().getSessionService().fillProfileProperties(profile, true);
+            Runnable runnable = () -> {
+                try {
+                    GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
+                    profile.getProperties().clear();
+                    MinecraftClient.getInstance().getSessionService().fillProfileProperties(profile, true);
 
-                Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = MinecraftClient.getInstance().getSkinProvider().getTextures(profile);
-                MinecraftProfileTexture profileTexture = map.get(MinecraftProfileTexture.Type.SKIN);
+                    Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = MinecraftClient.getInstance().getSkinProvider().getTextures(profile);
+                    MinecraftProfileTexture profileTexture = map.get(MinecraftProfileTexture.Type.SKIN);
 
-                skinType = profileTexture.getMetadata("model");
-                if(skinType == null){
-                    skinType = "default";
+                    skinType = profileTexture.getMetadata("model");
+                    if (skinType == null) {
+                        skinType = "default";
+                    }
+                    skinId = MinecraftClient.getInstance().getSkinProvider().loadSkin(profileTexture, MinecraftProfileTexture.Type.SKIN);
                 }
-                skinId = MinecraftClient.getInstance().getSkinProvider().loadSkin(profileTexture, MinecraftProfileTexture.Type.SKIN);
-            }
 
-            //failed to get skin, loads default
-            catch (Exception e){
-                //todo remove for stable
-                System.out.println("Error Loading Skin:");
-                e.printStackTrace();
+                //failed to get skin, loads default
+                catch (Exception e) {
+                    //todo remove for stable
+                    System.out.println("Error Loading Skin:");
+                    e.printStackTrace();
 
-                GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
-                skinId = DefaultSkinHelper.getTexture(profile.getId());
-                skinType = DefaultSkinHelper.getModel(profile.getId());
-            }
+                    GameProfile profile = MinecraftClient.getInstance().getSession().getProfile();
+                    skinId = DefaultSkinHelper.getTexture(profile.getId());
+                    skinType = DefaultSkinHelper.getModel(profile.getId());
+                } finally {
+                    skinChanged = true;
+                }
+            };
 
-            finally {
-                skinChanged = true;
-                initialized = true;
-            }
+            Util.getMainWorkerExecutor().execute(runnable);
         }
     }
 
