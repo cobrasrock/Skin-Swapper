@@ -24,7 +24,7 @@ public class SkinSwapperConfig extends MidnightConfig {
     //Button Location
     @Comment public static Comment buttonLocationOptions;
 
-    @Entry public static ModButton skinOptionsButton = ModButton.CENTER;
+    @Entry public static ModButton skinOptionsButton = ModButton.OFF;
     @Entry public static ModButton multiplayerButton = ModButton.LEFT;
     @Entry public static ModButton singleplayerButton = ModButton.OFF;
 
