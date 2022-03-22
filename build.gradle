@@ -48,6 +48,9 @@ dependencies {
 
 	//3d skin layers
 	modImplementation "curse.maven:${project.skinlayers_version}"
+
+	//multiconnect TODO readd when updated for 1.18.2
+	//modImplementation "curse.maven:${project.multiconnect_version}"
 }
 
 processResources {
