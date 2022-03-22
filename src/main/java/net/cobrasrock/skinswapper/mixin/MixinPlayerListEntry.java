@@ -25,6 +25,8 @@ public class MixinPlayerListEntry {
 
     @Shadow @Final private GameProfile profile;
 
+    @Shadow private boolean texturesLoaded;
+
     @Inject(at = @At("HEAD"), method = "loadTextures", cancellable = true)
     private void loadTextures(CallbackInfo ci){
 
@@ -46,7 +48,25 @@ public class MixinPlayerListEntry {
                 SkinChangeManager.skinChanged = false;
             }
 
+            loadCapeTextures();
+
             ci.cancel();
+        }
+    }
+
+    //adapted from yarn mappings
+    protected void loadCapeTextures() {
+        PlayerListEntry playerListEntry = (PlayerListEntry)(Object) this;
+        synchronized (playerListEntry) {
+            if (!this.texturesLoaded) {
+                this.texturesLoaded = true;
+                MinecraftClient.getInstance().getSkinProvider().loadSkin(this.profile, (type, id, texture) -> {
+
+                    if (type != MinecraftProfileTexture.Type.SKIN) {
+                        this.textures.put(type, id);
+                    }
+                }, true);
+            }
         }
     }
 }
