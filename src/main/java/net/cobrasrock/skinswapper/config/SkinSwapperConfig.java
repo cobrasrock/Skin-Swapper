@@ -19,7 +19,7 @@ public class SkinSwapperConfig extends MidnightConfig {
 
     @Entry public static boolean offlineMode = false;
 
-    @Entry public static boolean offlineModeToggle = false;
+    @Entry public static boolean offlineModeToggle = true;
 
     //Button Location
     @Comment public static Comment buttonLocationOptions;

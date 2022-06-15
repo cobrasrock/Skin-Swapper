@@ -13,6 +13,14 @@
     "sources": "https://github.com/cobrasrock/Skin-Swapper"
   },
 
+  "custom": {
+    "modmenu": {
+      "links": {
+        "skinswapper.wiki": "https://github.com/cobrasrock/Skin-Swapper/wiki/Config-Options"
+      }
+    }
+  },
+
   "license": "GNU gpl 3",
   "icon": "assets/skinswapper/icon.png",
 

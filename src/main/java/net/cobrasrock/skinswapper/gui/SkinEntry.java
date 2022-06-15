@@ -9,7 +9,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -69,7 +68,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
     }
 
     public Text getNarration() {
-        return new LiteralText(fname);
+        return Text.of(fname);
     }
     
     private void renderIcon(int k, int j, MatrixStack matrices) {

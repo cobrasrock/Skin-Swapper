@@ -159,7 +159,7 @@ public class SkinChangeManager {
                     connection = ClientConnection.connect(address, MinecraftClient.getInstance().options.shouldUseNativeTransport());
                     connection.setPacketListener(new ClientLoginNetworkHandler(connection, MinecraftClient.getInstance(), new MultiplayerScreen(new TitleScreen()), (Text text) -> {}));
                     connection.send(new HandshakeC2SPacket(hostname, port, NetworkState.LOGIN));
-                    connection.send(new LoginHelloC2SPacket(MinecraftClient.getInstance().getSession().getProfile()));
+                    connection.send(new LoginHelloC2SPacket(MinecraftClient.getInstance().getSession().getUsername(), MinecraftClient.getInstance().getProfileKeys().getPublicKeyData()));
                 }
             }
         } catch (Exception ignored){}

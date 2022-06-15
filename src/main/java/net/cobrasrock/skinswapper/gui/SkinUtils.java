@@ -51,7 +51,7 @@ public class SkinUtils {
             ClientWorld clientWorld = (ClientWorld) unsafe.allocateInstance(ClientWorld.class);
             GameProfile profile = (GameProfile) unsafe.allocateInstance(GameProfile.class);
 
-            player = new OtherClientPlayerEntity(clientWorld, profile);
+            player = new OtherClientPlayerEntity(clientWorld, profile, null);
         }
 
         return player;

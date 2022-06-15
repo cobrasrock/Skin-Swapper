@@ -39,5 +39,7 @@
   "skinswapper.midnightconfig.enum.ModButton.LEFT":"Left",
   "skinswapper.midnightconfig.enum.ModButton.RIGHT":"Right",
   "skinswapper.midnightconfig.enum.ModButton.CENTER":"Center",
-  "skinswapper.midnightconfig.enum.ModButton.OFF":"Off"
+  "skinswapper.midnightconfig.enum.ModButton.OFF":"Off",
+
+  "skinswapper.wiki": "Wiki"
 }

@@ -10,7 +10,7 @@
     "menu.MixinSingleplayerMenu",
     "menu.MixinSkinMenu",
     "preview.AbstractClientPlayerEntityMixin",
-    "preview.ClientWorldMixin",
+    "preview.WorldMixin",
     "preview.LivingEntityRendererMixin",
     "preview.PlayerEntityRendererMixin"
   ],

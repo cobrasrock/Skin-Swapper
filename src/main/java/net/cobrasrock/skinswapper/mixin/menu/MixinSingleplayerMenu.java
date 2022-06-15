@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,10 +43,10 @@ public class MixinSingleplayerMenu extends Screen {
             }
 
             //draws change skin button
-            this.addDrawableChild(new ButtonWidget(buttonX, buttonY, 100, 20, new TranslatableText("skin.change_skin"), button -> {
+            this.addDrawableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
                 MinecraftClient.getInstance().setScreen(new SkinScreen(this));
             }));
-            this.addSelectableChild(new ButtonWidget(buttonX, buttonY, 100, 20, new TranslatableText("skin.change_skin"), button -> {
+            this.addSelectableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
                 MinecraftClient.getInstance().setScreen(new SkinScreen(this));
             }));
         }

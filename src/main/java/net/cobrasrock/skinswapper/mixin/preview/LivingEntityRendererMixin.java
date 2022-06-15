@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
     //prevents player from being invisible
-    @Inject(at = @At("HEAD"), method = "hasLabel", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", cancellable = true)
     public void hasLabel(CallbackInfoReturnable<Boolean> cir){
         if(MinecraftClient.getInstance().currentScreen instanceof SkinScreen){
             cir.setReturnValue(false);
