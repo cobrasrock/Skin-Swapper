@@ -72,7 +72,7 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
     }
     
     private void renderIcon(int k, int j, MatrixStack matrices) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, rawSkin);
         RenderSystem.enableBlend();

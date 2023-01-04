@@ -1,5 +1,6 @@
 package net.cobrasrock.skinswapper.gui;
 
+import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -8,11 +9,9 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import org.lwjgl.glfw.GLFW;
 
 import java.net.UnknownHostException;
-import java.util.Objects;
 
 public class DownloadScreen extends Screen {
     private TextFieldWidget downloadField;
@@ -28,17 +27,20 @@ public class DownloadScreen extends Screen {
     
     @Override
     protected void init() {
-        Objects.requireNonNull(this.client).keyboard.setRepeatEvents(true);
 
         //back button
-        this.addDrawableChild(new ButtonWidget((this.width - (this.width/4)) + 2, this.height - 24, 100, 20, Text.translatable("gui.back"), button -> MinecraftClient.getInstance().setScreen(parent)));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("gui.back"), button -> MinecraftClient.getInstance().setScreen(parent))
+                .dimensions((this.width - (this.width/4)) + 2, this.height - 24, 100, 20)
+                .build());
 
         //download skin button
-        this.addDrawableChild(new ButtonWidget((int)(this.width / 2 - 50), 50, 100, 20, Text.translatable("skin.download"), button -> {
-            if(download(downloadField.getText())) {
-                MinecraftClient.getInstance().setScreen(parent);
-            }
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("skin.download"), button -> {
+                if(download(downloadField.getText())) {
+                    MinecraftClient.getInstance().setScreen(parent);
+                }
+                })
+                .dimensions(this.width / 2 - 50, 50, 100, 20)
+                .build());
 
         //download text field
         this.downloadField = new TextFieldWidget(this.font, (this.width/2 - 150), 20, 300, 20, this.downloadField, Text.translatable("skin.username"));

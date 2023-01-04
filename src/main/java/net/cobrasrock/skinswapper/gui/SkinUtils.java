@@ -51,7 +51,7 @@ public class SkinUtils {
             ClientWorld clientWorld = (ClientWorld) unsafe.allocateInstance(ClientWorld.class);
             GameProfile profile = (GameProfile) unsafe.allocateInstance(GameProfile.class);
 
-            player = new OtherClientPlayerEntity(clientWorld, profile, null);
+            player = new OtherClientPlayerEntity(clientWorld, profile);
         }
 
         return player;
@@ -140,7 +140,7 @@ public class SkinUtils {
         File skinFile = entry.skin_file;
         SkinType skinType = entry.skinType;
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, rawSkin);
         RenderSystem.enableBlend();

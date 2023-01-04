@@ -17,7 +17,12 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	maven {
-		url = "https://www.cursemaven.com/"
+		setUrl("https://cursemaven.com")
+	}
+
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
 	}
 }
 
@@ -47,10 +52,7 @@ dependencies {
 	modImplementation "curse.maven:${project.modmenu_version}"
 
 	//3d skin layers
-	modImplementation "curse.maven:${project.skinlayers_version}"
-
-	//multiconnect TODO readd when updated for 1.18.2
-	//modImplementation "curse.maven:${project.multiconnect_version}"
+	modImplementation "maven.modrinth:${project.skinlayers_version}"
 }
 
 processResources {

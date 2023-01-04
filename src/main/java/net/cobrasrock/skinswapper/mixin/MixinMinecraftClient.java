@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(MinecraftClient.class)
-public class MixinMinecraftClient {
+public abstract class MixinMinecraftClient {
 
     @ModifyVariable(at = @At("HEAD"), method = "render", ordinal = 0, argsOnly = true)
     private boolean render(boolean value){

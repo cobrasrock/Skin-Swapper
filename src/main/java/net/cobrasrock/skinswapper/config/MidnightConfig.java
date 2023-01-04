@@ -213,21 +213,27 @@ public abstract class MidnightConfig {
             super.init();
             if (!reload) loadValues();
 
-            this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 28, 150, 20, ScreenTexts.CANCEL, button -> {
-                loadValues();
-                Objects.requireNonNull(client).setScreen(parent);
-            }));
+            this.addDrawableChild(ButtonWidget.builder(ScreenTexts.CANCEL, button -> {
+                        loadValues();
+                        Objects.requireNonNull(client).setScreen(parent);
+                    })
+                    .dimensions(this.width / 2 - 154, this.height - 28, 150, 20)
+                    .build());
 
-            ButtonWidget done = this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 28, 150, 20, ScreenTexts.DONE, (button) -> {
-                for (EntryInfo info : entries)
-                    if (info.id.equals(modid)) {
-                        try {
-                            info.field.set(null, info.value);
-                        } catch (IllegalAccessException ignored) {}
-                    }
-                write(modid);
-                Objects.requireNonNull(client).setScreen(parent);
-            }));
+            ButtonWidget done = ButtonWidget.builder(ScreenTexts.DONE, (button) -> {
+                        for (EntryInfo info : entries)
+                            if (info.id.equals(modid)) {
+                                try {
+                                    info.field.set(null, info.value);
+                                } catch (IllegalAccessException ignored) {}
+                            }
+                        write(modid);
+                        Objects.requireNonNull(client).setScreen(parent);
+                    })
+                    .dimensions(this.width / 2 + 4, this.height - 28, 150, 20)
+                    .build();
+
+            this.addDrawableChild(done);
 
             this.list = new MidnightConfigListWidget(this.client, this.width, this.height, 32, this.height - 32, 25);
             if (this.client != null && this.client.world != null) this.list.setRenderBackground(false);
@@ -235,20 +241,26 @@ public abstract class MidnightConfig {
             for (EntryInfo info : entries) {
                 if (info.id.equals(modid)) {
                     Text name = Objects.requireNonNullElseGet(info.name, () -> Text.translatable(translationPrefix + info.field.getName()));
-                    ButtonWidget resetButton = new ButtonWidget(width - 205, 0, 40, 20, Text.of("Reset").copy().formatted(Formatting.RED), (button -> {
-                        info.value = info.defaultValue;
-                        info.tempValue = info.defaultValue.toString();
-                        info.index = 0;
-                        double scrollAmount = list.getScrollAmount();
-                        this.reload = true;
-                        Objects.requireNonNull(client).setScreen(this);
-                        list.setScrollAmount(scrollAmount);
-                    }));
+                    ButtonWidget resetButton = ButtonWidget.builder(Text.of("Reset").copy().formatted(Formatting.RED), button -> {
+                                info.value = info.defaultValue;
+                                info.tempValue = info.defaultValue.toString();
+                                info.index = 0;
+                                double scrollAmount = list.getScrollAmount();
+                                this.reload = true;
+                                Objects.requireNonNull(client).setScreen(this);
+                                list.setScrollAmount(scrollAmount);
+                            })
+                            .dimensions(width - 205, 0, 40, 20)
+                            .build();
 
                     if (info.widget instanceof Map.Entry) {
                         Map.Entry<ButtonWidget.PressAction, Function<Object, Text>> widget = (Map.Entry<ButtonWidget.PressAction, Function<Object, Text>>) info.widget;
                         if (info.field.getType().isEnum()) widget.setValue(value -> Text.translatable(translationPrefix + "enum." + info.field.getType().getSimpleName() + "." + info.value.toString()));
-                        this.list.addButton(new ButtonWidget(width - 160, 0,150, 20, widget.getValue().apply(info.value), widget.getKey()),resetButton, null,name);
+
+                        this.list.addButton(ButtonWidget.builder(widget.getValue().apply(info.value), widget.getKey())
+                                .dimensions(width - 160, 0,150, 20)
+                                .build(),resetButton, null,name);
+
                     } else if (info.field.getType() == List.class) {
                         if (!reload) info.index = 0;
                         TextFieldWidget widget = new TextFieldWidget(textRenderer, width - 160, 0, 150, 20, null);
@@ -259,15 +271,19 @@ public abstract class MidnightConfig {
                         widget.setTextPredicate(processor);
                         resetButton.setWidth(20);
                         resetButton.setMessage(Text.of("R").copy().formatted(Formatting.RED));
-                        ButtonWidget cycleButton = new ButtonWidget(width - 185, 0, 20, 20, Text.of(String.valueOf(info.index)).copy().formatted(Formatting.GOLD), (button -> {
-                            ((List<String>)info.value).remove("");
-                            double scrollAmount = list.getScrollAmount();
-                            this.reload = true;
-                            info.index = info.index + 1;
-                            if (info.index > ((List<String>)info.value).size()) info.index = 0;
-                            Objects.requireNonNull(client).setScreen(this);
-                            list.setScrollAmount(scrollAmount);
-                        }));
+
+                        ButtonWidget cycleButton = ButtonWidget.builder(Text.of(String.valueOf(info.index)).copy().formatted(Formatting.GOLD), (button -> {
+                                    ((List<String>)info.value).remove("");
+                                    double scrollAmount = list.getScrollAmount();
+                                    this.reload = true;
+                                    info.index = info.index + 1;
+                                    if (info.index > ((List<String>)info.value).size()) info.index = 0;
+                                    Objects.requireNonNull(client).setScreen(this);
+                                    list.setScrollAmount(scrollAmount);
+                                }))
+                                .dimensions(width - 185, 0, 20, 20)
+                                .build();
+
                         this.list.addButton(widget, resetButton, cycleButton, name);
                     } else if (info.widget != null) {
                         TextFieldWidget widget = new TextFieldWidget(textRenderer, width - 160, 0, 150, 20, null);
@@ -369,15 +385,15 @@ public abstract class MidnightConfig {
         }
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             if (button != null) {
-                button.y = y;
+                button.setY(y);
                 button.render(matrices, mouseX, mouseY, tickDelta);
             }
             if (resetButton != null) {
-                resetButton.y = y;
+                button.setY(y);
                 resetButton.render(matrices, mouseX, mouseY, tickDelta);
             }
             if (indexButton != null) {
-                indexButton.y = y;
+                button.setY(y);
                 indexButton.render(matrices, mouseX, mouseY, tickDelta);
             }
             if (text != null && (!text.getString().contains("spacer") || button != null))

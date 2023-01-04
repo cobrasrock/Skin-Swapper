@@ -16,6 +16,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
 import java.io.File;
+import java.util.function.Supplier;
 
 public class SkinScreen extends Screen {
     final File folder;
@@ -41,14 +42,16 @@ public class SkinScreen extends Screen {
         addSkins(folder);
 
         //back button
-        this.addDrawableChild(new ButtonWidget((this.width - (this.width/4)) + 2, this.height - 24, 100, 20, Text.translatable("gui.back"), button -> {
-            MinecraftClient.getInstance().setScreen(parent);
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("gui.back"), button -> {
+                    MinecraftClient.getInstance().setScreen(parent);
+                })
+                .dimensions((this.width - (this.width/4)) + 2, this.height - 24, 100, 20)
+                .build());
 
         //change skin button
         this.addDrawableChild(new ButtonWidget(((this.width - (this.width/4)) - 100 - 2), this.height - 24, 100, 20, Text.translatable("skin.change_skin"), button -> {
             this.client.setScreen(new ConfirmScreen(this::changeSkin, Text.of(I18n.translate("skin.are_you_sure")), Text.of(I18n.translate("skin.changeto") + " '" + getSelected().fname + "'"), Text.translatable("gui.yes"), Text.translatable("gui.cancel")));
-        }) {
+        }, Supplier::get) {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
@@ -58,13 +61,15 @@ public class SkinScreen extends Screen {
         });
 
         //open skin folder
-        this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 24, 100, 20, Text.translatable("skin.open_folder"), button -> Util.getOperatingSystem().open(new File("skins"))));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("skin.open_folder"), button -> Util.getOperatingSystem().open(new File("skins")))
+                .dimensions(this.width/4 + 2, this.height - 24, 100, 20)
+                .build());
 
         //delete skin button
         this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 24, 100, 20, Text.translatable("skin.delete_skin"), button ->
         {
             this.client.setScreen(new ConfirmScreen(this::removeEntry, Text.of(I18n.translate("skin.are_you_sure_remove")), Text.of("'" + getSelected().fname + "' " + I18n.translate("skin.long")), Text.translatable("selectWorld.delete"), Text.translatable("gui.cancel")));
-        }) {
+        }, Supplier::get) {
             @Override //sets button to be active only if a skin is selected
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
@@ -74,7 +79,7 @@ public class SkinScreen extends Screen {
         });
 
         //classic select button
-        this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 48, 100, 20, Text.translatable("skin.classic"), button -> getSelected().toggleSkinType()) {
+        this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 48, 100, 20, Text.translatable("skin.classic"), button -> getSelected().toggleSkinType(), Supplier::get) {
             @Override //sets button to be active only if a skin is selected and slim
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
@@ -84,7 +89,7 @@ public class SkinScreen extends Screen {
         });
 
         //slim select button
-        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 48, 100, 20, Text.translatable("skin.slim"), button -> getSelected().toggleSkinType()) {
+        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 48, 100, 20, Text.translatable("skin.slim"), button -> getSelected().toggleSkinType(), Supplier::get) {
             @Override //sets button to be active only if a skin is selected and classic
             public void render(MatrixStack matrices, int var1, int var2, float var3) {
                 visible = true;
@@ -97,19 +102,23 @@ public class SkinScreen extends Screen {
 
         //download button
         if (SkinSwapperConfig.showDownloadScreen) {
-            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, topRowY, 100, 20, Text.translatable("skin.download_skin"), button -> MinecraftClient.getInstance().setScreen(new DownloadScreen(this))));
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable("skin.download_skin"), button -> MinecraftClient.getInstance().setScreen(new DownloadScreen(this)))
+                    .dimensions(this.width/4 + 2, topRowY, 100, 20)
+                    .build());
         }
 
         //refresh button
-        this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, topRowY, 100, 20, Text.translatable("selectServer.refresh"), button -> {
-            addSkins(folder);
-            skinList.setSelected(null);
-            error = "";
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.refresh"), button -> {
+                    addSkins(folder);
+                    skinList.setSelected(null);
+                    error = "";
+                })
+                .dimensions(this.width/4 - 100 - 2, topRowY, 100, 20)
+                .build());
 
         if(SkinSwapperConfig.offlineModeToggle){
             //online select button
-            this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 28, 100, 20, Text.translatable("skin.online"), button -> SkinSwapperConfig.toggleOffline()) {
+            this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 28, 100, 20, Text.translatable("skin.online"), button -> SkinSwapperConfig.toggleOffline(), Supplier::get) {
                 @Override
                 public void render(MatrixStack matrices, int var1, int var2, float var3) {
                     visible = true;
@@ -119,7 +128,7 @@ public class SkinScreen extends Screen {
             });
 
             //offline select button
-            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, 28, 100, 20, Text.translatable("skin.offline"), button -> SkinSwapperConfig.toggleOffline()) {
+            this.addDrawableChild(new ButtonWidget(this.width/4 + 2, 28, 100, 20, Text.translatable("skin.offline"), button -> SkinSwapperConfig.toggleOffline(), Supplier::get) {
                 @Override
                 public void render(MatrixStack matrices, int var1, int var2, float var3) {
                     visible = true;

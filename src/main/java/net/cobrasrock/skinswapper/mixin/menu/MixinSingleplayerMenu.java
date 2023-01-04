@@ -43,12 +43,16 @@ public class MixinSingleplayerMenu extends Screen {
             }
 
             //draws change skin button
-            this.addDrawableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
-                MinecraftClient.getInstance().setScreen(new SkinScreen(this));
-            }));
-            this.addSelectableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
-                MinecraftClient.getInstance().setScreen(new SkinScreen(this));
-            }));
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable("skin.change_skin"), button -> MinecraftClient.getInstance().setScreen(new SkinScreen(this)))
+                    .dimensions(buttonX, 6, 100, 20)
+                    .build());
+
+            //this.addDrawableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
+               // MinecraftClient.getInstance().setScreen(new SkinScreen(this));
+            //}));
+            //this.addSelectableChild(new ButtonWidget(buttonX, buttonY, 100, 20, Text.translatable("skin.change_skin"), button -> {
+                //MinecraftClient.getInstance().setScreen(new SkinScreen(this));
+            //}));
         }
     }
 
