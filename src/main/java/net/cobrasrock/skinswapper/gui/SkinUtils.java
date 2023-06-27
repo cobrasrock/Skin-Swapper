@@ -3,13 +3,15 @@ package net.cobrasrock.skinswapper.gui;
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.cobrasrock.skinswapper.Compatibility;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import sun.misc.Unsafe;
 
@@ -40,7 +42,9 @@ public class SkinUtils {
      * Creates a dummy player.
      * @return A dummy player
      */
-    public static OtherClientPlayerEntity getDummyPlayer() throws Exception{
+    public static LivingEntity getDummyPlayer() throws Exception{
+        if(MinecraftClient.getInstance().player != null) return MinecraftClient.getInstance().player;
+
         if(player == null){
 
             //hack to avoid creating a world
@@ -58,9 +62,9 @@ public class SkinUtils {
     }
 
     //draws 3d player in menu
-    public static void drawPlayer(int x, int y, int height, int mouseX, int mouseY) throws Exception{
+    public static void drawPlayer(DrawContext context, int x, int y, int height, int mouseX, int mouseY) throws Exception{
         Compatibility.startSkinPreview();
-        InventoryScreen.drawEntity(x, y, height, x-mouseX, (y-160)-mouseY, getDummyPlayer());
+        InventoryScreen.drawEntity(context, x, y, height, x-mouseX, (y-160)-mouseY, getDummyPlayer());
         Compatibility.stopSkinPreview();
     }
 
@@ -133,7 +137,7 @@ public class SkinUtils {
     }
 
     //draws a 2d render of the skin, legacy method
-    public static void drawSkin(int k, int j, MatrixStack matrices, SkinEntry entry) {
+    public static void drawSkin(DrawContext context, int k, int j, SkinEntry entry) {
 
         boolean oldSkin = entry.oldSkin;
         Identifier rawSkin = entry.rawSkin;
@@ -149,99 +153,99 @@ public class SkinUtils {
         if(oldSkin)
         {
             //head icon
-            DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
+            context.drawTexture(rawSkin, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
             if(!skinFile.getName().equals("Notch.png")) //Notch's skin uses black instead of transparency
             {
-                DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
+                context.drawTexture(rawSkin, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
             }
 
             //body
-            DrawableHelper.drawTexture(matrices, k, j+32, 80.0F, 80.0F, 32, 48, 256, 128);
+            context.drawTexture(rawSkin, k, j+32, 80.0F, 80.0F, 32, 48, 256, 128);
 
             //arm
 
             //left
             if(skinType.equals(SkinType.SLIM))
             {
-                DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 128);
+                context.drawTexture(rawSkin, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 128);
             }
 
             else
             {
-                DrawableHelper.drawTexture(matrices, k-16, j+32, 176.0F, 80.0F, 16, 48, 256, 128);
+                context.drawTexture(rawSkin, k-16, j+32, 176.0F, 80.0F, 16, 48, 256, 128);
             }
 
             //right(flips horizontal)
             if(skinType.equals(SkinType.SLIM))
             {
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 184F, 80.0F, 4, 48, 256, 128);
-                DrawableHelper.drawTexture(matrices, k+36, j+32, 180F, 80.0F, 4, 48, 256, 128);
-                DrawableHelper.drawTexture(matrices, k+40, j+32, 176F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+32, j+32, 184F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+36, j+32, 180F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+40, j+32, 176F, 80.0F, 4, 48, 256, 128);
             }
 
             else
             {
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 188F, 80.0F, 4, 48, 256, 128);
-                DrawableHelper.drawTexture(matrices, k+36, j+32, 184F, 80.0F, 4, 48, 256, 128);
-                DrawableHelper.drawTexture(matrices, k+40, j+32, 180F, 80.0F, 4, 48, 256, 128);
-                DrawableHelper.drawTexture(matrices, k+44, j+32, 176F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+32, j+32, 188F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+36, j+32, 184F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+40, j+32, 180F, 80.0F, 4, 48, 256, 128);
+                context.drawTexture(rawSkin, k+44, j+32, 176F, 80.0F, 4, 48, 256, 128);
             }
 
 
             //leg
 
             //left
-            DrawableHelper.drawTexture(matrices, k, j+80, 16.0F, 80.0F, 16, 48, 256, 128);
+            context.drawTexture(rawSkin, k, j+80, 16.0F, 80.0F, 16, 48, 256, 128);
 
             //right(flips horizontal)
-            DrawableHelper.drawTexture(matrices, k+28, j+80, 16.0F, 80.0F, 4, 48, 256, 128);
-            DrawableHelper.drawTexture(matrices, k+24, j+80, 20.0F, 80.0F, 4, 48, 256, 128);
-            DrawableHelper.drawTexture(matrices, k+20, j+80, 24.0F, 80.0F, 4, 48, 256, 128);
-            DrawableHelper.drawTexture(matrices, k+16, j+80, 28.0F, 80.0F, 4, 48, 256, 128);
+            context.drawTexture(rawSkin, k+28, j+80, 16.0F, 80.0F, 4, 48, 256, 128);
+            context.drawTexture(rawSkin, k+24, j+80, 20.0F, 80.0F, 4, 48, 256, 128);
+            context.drawTexture(rawSkin, k+20, j+80, 24.0F, 80.0F, 4, 48, 256, 128);
+            context.drawTexture(rawSkin, k+16, j+80, 28.0F, 80.0F, 4, 48, 256, 128);
         }
 
         else
         {
             //head icon
-            DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 256);
-            DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 256);
+            context.drawTexture(rawSkin, k, j, 32.0F, 32.0F, 32, 32, 256, 256);
+            context.drawTexture(rawSkin, k, j, 160.0F, 32.0F, 32, 32, 256, 256);
 
             //body
-            DrawableHelper.drawTexture(matrices, k, j+32, 80.0F, 80.0F, 32, 48, 256, 256);
-            DrawableHelper.drawTexture(matrices, k, j+32, 80.0F, 144.0F, 32, 48, 256, 256);
+            context.drawTexture(rawSkin, k, j+32, 80.0F, 80.0F, 32, 48, 256, 256);
+            context.drawTexture(rawSkin, k, j+32, 80.0F, 144.0F, 32, 48, 256, 256);
 
             //left arm
             if(skinType.equals(SkinType.SLIM))
             {
-                DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 256);
-                DrawableHelper.drawTexture(matrices, k-12, j+32, 176.0F, 144.0F, 12, 48, 256, 256);
+                context.drawTexture(rawSkin, k-12, j+32, 176.0F, 80.0F, 12, 48, 256, 256);
+                context.drawTexture(rawSkin, k-12, j+32, 176.0F, 144.0F, 12, 48, 256, 256);
             }
 
             else
             {
-                DrawableHelper.drawTexture(matrices, k-16, j+32, 176.0F, 80.0F, 16, 48, 256, 256);
-                DrawableHelper.drawTexture(matrices, k-16, j+32, 176.0F, 144.0F, 16, 48, 256, 256);
+                context.drawTexture(rawSkin, k-16, j+32, 176.0F, 80.0F, 16, 48, 256, 256);
+                context.drawTexture(rawSkin, k-16, j+32, 176.0F, 144.0F, 16, 48, 256, 256);
             }
 
             //right arm
             if(skinType.equals(SkinType.SLIM))
             {
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 144.0F, 208.0F, 12, 48, 256, 256);
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 208.0F, 208.0F, 12, 48, 256, 256);
+                context.drawTexture(rawSkin, k+32, j+32, 144.0F, 208.0F, 12, 48, 256, 256);
+                context.drawTexture(rawSkin, k+32, j+32, 208.0F, 208.0F, 12, 48, 256, 256);
             }
             else
             {
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 144.0F, 208.0F, 16, 48, 256, 256);
-                DrawableHelper.drawTexture(matrices, k+32, j+32, 208.0F, 208.0F, 16, 48, 256, 256);
+                context.drawTexture(rawSkin, k+32, j+32, 144.0F, 208.0F, 16, 48, 256, 256);
+                context.drawTexture(rawSkin, k+32, j+32, 208.0F, 208.0F, 16, 48, 256, 256);
             }
 
             //reght leg
-            DrawableHelper.drawTexture(matrices, k+16, j+80, 16.0F, 80.0F, 16, 48, 256, 256);
-            DrawableHelper.drawTexture(matrices, k+16, j+80, 16.0F, 144.0F, 16, 48, 256, 256);
+            context.drawTexture(rawSkin, k+16, j+80, 16.0F, 80.0F, 16, 48, 256, 256);
+            context.drawTexture(rawSkin, k+16, j+80, 16.0F, 144.0F, 16, 48, 256, 256);
 
             //left leg
-            DrawableHelper.drawTexture(matrices, k, j+80, 80.0F, 208.0F, 16, 48, 256, 256);
-            DrawableHelper.drawTexture(matrices, k, j+80, 16.0F, 208.0F, 16, 48, 256, 256);
+            context.drawTexture(rawSkin, k, j+80, 80.0F, 208.0F, 16, 48, 256, 256);
+            context.drawTexture(rawSkin, k, j+80, 16.0F, 208.0F, 16, 48, 256, 256);
         }
     }
 }

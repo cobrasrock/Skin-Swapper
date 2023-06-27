@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
@@ -300,10 +300,10 @@ public abstract class MidnightConfig {
 
         }
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-            this.renderBackground(matrices);
-            this.list.render(matrices, mouseX, mouseY, delta);
-            drawCenteredText(matrices, textRenderer, title, width / 2, 15, 0xFFFFFF);
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+            this.renderBackground(context);
+            this.list.render(context, mouseX, mouseY, delta);
+            context.drawText(textRenderer, title, width / 2, 15, 0xFFFFFF, true);
 
             for (EntryInfo info : entries) {
                 if (info.id.equals(modid)) {
@@ -313,17 +313,17 @@ public abstract class MidnightConfig {
                         Text name = Text.translatable(this.translationPrefix + info.field.getName());
                         String key = translationPrefix + info.field.getName() + ".tooltip";
 
-                        if (info.error != null && text.equals(name)) renderTooltip(matrices, info.error.getValue(), mouseX, mouseY);
+                        if (info.error != null && text.equals(name)); //renderTooltip(matrices, info.error.getValue(), mouseX, mouseY);
                         else if (I18n.hasTranslation(key) && text.equals(name)) {
                             List<Text> list = new ArrayList<>();
                             for (String str : I18n.translate(key).split("\n"))
                                 list.add(Text.of(str));
-                            renderTooltip(matrices, list, mouseX, mouseY);
+                            //renderTooltip(matrices, list, mouseX, mouseY);
                         }
                     }
                 }
             }
-            super.render(matrices,mouseX,mouseY,delta);
+            super.render(context,mouseX,mouseY,delta);
         }
     }
 
@@ -383,21 +383,21 @@ public abstract class MidnightConfig {
         public static ButtonEntry create(ClickableWidget button, Text text, ClickableWidget resetButton, ClickableWidget indexButton) {
             return new ButtonEntry(button, text, resetButton, indexButton);
         }
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             if (button != null) {
                 button.setY(y);
-                button.render(matrices, mouseX, mouseY, tickDelta);
+                button.render(context, mouseX, mouseY, tickDelta);
             }
             if (resetButton != null) {
                 button.setY(y);
-                resetButton.render(matrices, mouseX, mouseY, tickDelta);
+                resetButton.render(context, mouseX, mouseY, tickDelta);
             }
             if (indexButton != null) {
                 button.setY(y);
-                indexButton.render(matrices, mouseX, mouseY, tickDelta);
+                indexButton.render(context, mouseX, mouseY, tickDelta);
             }
             if (text != null && (!text.getString().contains("spacer") || button != null))
-                DrawableHelper.drawTextWithShadow(matrices,textRenderer, text,12,y+5,0xFFFFFF);
+                context.drawTextWithShadow(textRenderer, text,12,y+5,0xFFFFFF);
         }
         public List<? extends Element> children() {return children;}
         public List<? extends Selectable> selectableChildren() {return children;}
@@ -414,8 +414,8 @@ public abstract class MidnightConfig {
         public static CategoryEntry create(Text text) {
             return new CategoryEntry(((MutableText)text).formatted(Formatting.BOLD, Formatting.YELLOW));
         }
-        public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            DrawableHelper.drawTextWithShadow(matrices,textRenderer, text,12,y+5,0xFFFFFF);
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            context.drawTextWithShadow(textRenderer, text,12,y+5,0xFFFFFF);
         }
 
         @Override

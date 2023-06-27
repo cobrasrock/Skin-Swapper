@@ -1,14 +1,11 @@
 package net.cobrasrock.skinswapper.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -50,14 +47,16 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
         this.client.getTextureManager().registerTexture(processedSkin, processedImageBackedTexture);
     }
 
-    public void render(MatrixStack matrices, int index, int y, int x, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean isSelected, float delta) {
+    @Override
+    public void render(DrawContext context, int index, int y, int x, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean isSelected, float delta) {
         TextRenderer font = this.client.textRenderer;
-        renderIcon(x,y,matrices);
+        renderIcon(x,y,context);
         int maxNameWidth = rowWidth - 32 - 3;
         if (font.getWidth(fname) > maxNameWidth) {
 			fname = font.trimToWidth(fname, maxNameWidth - font.getWidth("...")) + "...";
 		}
-        font.draw(matrices, fname, x + 35, y + 5, 0xFFFFFF);
+
+        context.drawText(MinecraftClient.getInstance().textRenderer, fname, x + 35, y + 5, 0xFFFFFF, true);
 
     }
 
@@ -71,26 +70,26 @@ public class SkinEntry extends AlwaysSelectedEntryListWidget.Entry<SkinEntry>
         return Text.of(fname);
     }
     
-    private void renderIcon(int k, int j, MatrixStack matrices) {
-        RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, rawSkin);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+    private void renderIcon(int k, int j, DrawContext context) {
+        //RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
+        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //RenderSystem.setShaderTexture(0, rawSkin);
+        //RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
 
         if(oldSkin) {
             //head icon
-            DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
+            context.drawTexture(rawSkin, k, j, 32.0F, 32.0F, 32, 32, 256, 128);
 
             //Notch's skin uses black instead of transparency
             if(!skin_file.getName().equals("Notch.png")) {
-                DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
+                context.drawTexture(rawSkin, k, j, 160.0F, 32.0F, 32, 32, 256, 128);
             }
         }
         else {
             //head icon
-            DrawableHelper.drawTexture(matrices, k, j, 32.0F, 32.0F, 32, 32, 256, 256);
-            DrawableHelper.drawTexture(matrices, k, j, 160.0F, 32.0F, 32, 32, 256, 256);
+            context.drawTexture(rawSkin, k, j, 32.0F, 32.0F, 32, 32, 256, 256);
+            context.drawTexture(rawSkin, k, j, 160.0F, 32.0F, 32, 32, 256, 256);
         }
     }
 

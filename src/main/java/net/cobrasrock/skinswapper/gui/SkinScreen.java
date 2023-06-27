@@ -6,6 +6,7 @@ import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -53,10 +54,10 @@ public class SkinScreen extends Screen {
             this.client.setScreen(new ConfirmScreen(this::changeSkin, Text.of(I18n.translate("skin.are_you_sure")), Text.of(I18n.translate("skin.changeto") + " '" + getSelected().fname + "'"), Text.translatable("gui.yes"), Text.translatable("gui.cancel")));
         }, Supplier::get) {
             @Override //sets button to be active only if a skin is selected
-            public void render(MatrixStack matrices, int var1, int var2, float var3) {
+            public void render(DrawContext context, int var1, int var2, float var3) {
                 visible = true;
                 active = (getSelected() != null);
-                super.render(matrices, var1, var2, var3);
+                super.render(context, var1, var2, var3);
             }
         });
 
@@ -71,30 +72,30 @@ public class SkinScreen extends Screen {
             this.client.setScreen(new ConfirmScreen(this::removeEntry, Text.of(I18n.translate("skin.are_you_sure_remove")), Text.of("'" + getSelected().fname + "' " + I18n.translate("skin.long")), Text.translatable("selectWorld.delete"), Text.translatable("gui.cancel")));
         }, Supplier::get) {
             @Override //sets button to be active only if a skin is selected
-            public void render(MatrixStack matrices, int var1, int var2, float var3) {
+            public void render(DrawContext context, int var1, int var2, float var3) {
                 visible = true;
                 active = (getSelected() != null);
-                super.render(matrices, var1, var2, var3);
+                super.render(context, var1, var2, var3);
             }
         });
 
         //classic select button
         this.addDrawableChild(new ButtonWidget(this.width/4 + 2, this.height - 48, 100, 20, Text.translatable("skin.classic"), button -> getSelected().toggleSkinType(), Supplier::get) {
             @Override //sets button to be active only if a skin is selected and slim
-            public void render(MatrixStack matrices, int var1, int var2, float var3) {
+            public void render(DrawContext context, int var1, int var2, float var3) {
                 visible = true;
                 active = (getSelected() != null && getSelected().skinType.equals(SkinType.SLIM));
-                super.render(matrices, var1, var2, var3);
+                super.render(context, var1, var2, var3);
             }
         });
 
         //slim select button
         this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, this.height - 48, 100, 20, Text.translatable("skin.slim"), button -> getSelected().toggleSkinType(), Supplier::get) {
             @Override //sets button to be active only if a skin is selected and classic
-            public void render(MatrixStack matrices, int var1, int var2, float var3) {
+            public void render(DrawContext context, int var1, int var2, float var3) {
                 visible = true;
                 active = (getSelected() != null && getSelected().skinType.equals(SkinType.CLASSIC));
-                super.render(matrices, var1, var2, var3);
+                super.render(context, var1, var2, var3);
             }
         });
 
@@ -120,44 +121,45 @@ public class SkinScreen extends Screen {
             //online select button
             this.addDrawableChild(new ButtonWidget(this.width/4 - 100 - 2, 28, 100, 20, Text.translatable("skin.online"), button -> SkinSwapperConfig.toggleOffline(), Supplier::get) {
                 @Override
-                public void render(MatrixStack matrices, int var1, int var2, float var3) {
+                public void render(DrawContext context, int var1, int var2, float var3) {
                     visible = true;
                     active = SkinSwapperConfig.offlineMode;
-                    super.render(matrices, var1, var2, var3);
+                    super.render(context, var1, var2, var3);
                 }
             });
 
             //offline select button
             this.addDrawableChild(new ButtonWidget(this.width/4 + 2, 28, 100, 20, Text.translatable("skin.offline"), button -> SkinSwapperConfig.toggleOffline(), Supplier::get) {
                 @Override
-                public void render(MatrixStack matrices, int var1, int var2, float var3) {
+                public void render(DrawContext context, int var1, int var2, float var3) {
                     visible = true;
                     active = !SkinSwapperConfig.offlineMode;
-                    super.render(matrices, var1, var2, var3);
+                    super.render(context, var1, var2, var3);
                 }
             });
         }
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta)
     {
-        this.renderBackgroundTexture(0);
-        skinList.render(matrices, mouseX, mouseY, delta);
-        super.render(matrices, mouseX, mouseY, delta);
+        this.renderBackgroundTexture(context);
+        skinList.render(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
 
         //draws skin preview
         if(getSelected() != null) {
             //draws 2d skin
             if (SkinSwapperConfig.displayType == SkinSwapperConfig.DisplayType.LEGACY) {
                 try {
-                    SkinUtils.drawSkin(this.width - skinList.getRowWidth() / 2 - 16, this.height / 2 - 64, matrices, getSelected());
+                    SkinUtils.drawSkin(context, this.width - skinList.getRowWidth() / 2 - 16, this.height / 2 - 64, getSelected());
                 } catch (Exception ignored) {}
             }
             //draws 3d skin
             else {
                 if (getSelected() != null) {
                     try {
-                        SkinUtils.drawPlayer(this.width - (this.width / 4), this.height - 36, 92, mouseX, mouseY);
+                        SkinUtils.drawPlayer(context, this.width - (this.width / 4), this.height - 36, 92, mouseX, mouseY);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -166,8 +168,7 @@ public class SkinScreen extends Screen {
         }
 
         //draws error messages
-        TextRenderer font = MinecraftClient.getInstance().textRenderer;
-        drawCenteredText(matrices, font, error, this.width - this.width/4, 12, 0xFFFFFF);
+        context.drawText(MinecraftClient.getInstance().textRenderer, error, this.width - this.width/4, 12, 0xFFFFFF, true);
     }
 
     public void addSkins(final File folder) {

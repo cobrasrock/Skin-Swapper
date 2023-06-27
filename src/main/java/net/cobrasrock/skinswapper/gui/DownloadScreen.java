@@ -3,6 +3,7 @@ package net.cobrasrock.skinswapper.gui;
 import net.cobrasrock.skinswapper.changeskin.SkinChange;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -47,13 +48,14 @@ public class DownloadScreen extends Screen {
         this.downloadField.setMaxLength(16);
         this.addSelectableChild(this.downloadField);
     }
-    
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackgroundTexture(0);
-        this.downloadField.render(matrices, mouseX, mouseY, delta);
-        super.render(matrices, mouseX, mouseY, delta);
-        drawCenteredText(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
-        drawCenteredText(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackgroundTexture(context);
+        this.downloadField.render(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
+        context.drawTextWithShadow(font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
+        context.drawTextWithShadow(font, error, this.width/2, this.height/2, 0xFFFFFF);
     }
 
     @Override
