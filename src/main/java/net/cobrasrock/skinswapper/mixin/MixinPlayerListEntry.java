@@ -30,6 +30,8 @@ public abstract class MixinPlayerListEntry {
 
     @Shadow private boolean texturesLoaded;
 
+    private boolean capeLoaded;
+
     @Shadow public abstract Identifier getSkinTexture();
 
     @Shadow public abstract String getModel();
@@ -38,14 +40,20 @@ public abstract class MixinPlayerListEntry {
     private void loadTextures(CallbackInfo ci){
 
         if(profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId())) {
-
             if (SkinChangeManager.isSettingsChanged()) {
                 if (SkinSwapperConfig.offlineMode) {
-                    SkinChangeManager.onlineSkinId = MoreObjects.firstNonNull(this.textures.get(MinecraftProfileTexture.Type.SKIN), DefaultSkinHelper.getTexture(this.profile.getId()));
-                    SkinChangeManager.onlineSkinType = getModel();
-
                     SkinChangeManager.initializeOfflineSkin();
-                } else {
+                } else if(SkinChangeManager.onlineSkinId != null) {
+                    SkinChangeManager.skinId = SkinChangeManager.onlineSkinId;
+                    SkinChangeManager.skinType = SkinChangeManager.onlineSkinType;
+                    SkinChangeManager.skinChanged = true;
+                }
+            }
+
+            else if (!this.texturesLoaded) {
+                if(SkinSwapperConfig.offlineMode)
+                    SkinChangeManager.initializeOfflineSkin();
+                else if(SkinChangeManager.onlineSkinId != null)  {
                     SkinChangeManager.skinId = SkinChangeManager.onlineSkinId;
                     SkinChangeManager.skinType = SkinChangeManager.onlineSkinType;
                     SkinChangeManager.skinChanged = true;
@@ -58,25 +66,59 @@ public abstract class MixinPlayerListEntry {
                 model = SkinChangeManager.skinType;
 
                 loadCapeTextures();
-            }
 
-            if(!(textures.get(MinecraftProfileTexture.Type.SKIN) == null)){
-                ci.cancel();
-            } else if (SkinChangeManager.skinId != null){
-                textures.put(MinecraftProfileTexture.Type.SKIN, SkinChangeManager.skinId);
-                model = SkinChangeManager.skinType;
-                loadCapeTextures();
-                ci.cancel();
+                if(texturesLoaded) ci.cancel();
             }
         }
+
+        synchronized(this) {
+            if (!this.texturesLoaded) {
+                this.texturesLoaded = true;
+                MinecraftClient.getInstance().getSkinProvider().loadSkin(this.profile, (type, id, texture) -> {
+
+                    if(profile.getId().equals(MinecraftClient.getInstance().getSession().getProfile().getId()) && type == MinecraftProfileTexture.Type.SKIN) {
+                        if(!SkinSwapperConfig.offlineMode && SkinChangeManager.onlineSkinId == null){
+                            this.textures.put(type, id);
+
+                            this.model = texture.getMetadata("model");
+                            if (this.model == null) {
+                                this.model = "default";
+                            }
+                        }
+
+                        //load online skin first run
+                        if(SkinChangeManager.onlineSkinId == null) {
+                            SkinChangeManager.onlineSkinId = id;
+                            SkinChangeManager.onlineSkinType = texture.getMetadata("model");
+                            if (SkinChangeManager.onlineSkinType == null) {
+                                SkinChangeManager.onlineSkinType = "default";
+                            }
+                        }
+                    }
+
+                    else {
+                        this.textures.put(type, id);
+                        if (type == MinecraftProfileTexture.Type.SKIN) {
+                            this.model = texture.getMetadata("model");
+                            if (this.model == null) {
+                                this.model = "default";
+                            }
+                        }
+                    }
+
+                }, true);
+            }
+        }
+
+        ci.cancel();
     }
 
     //adapted from yarn mappings
     protected void loadCapeTextures() {
         PlayerListEntry playerListEntry = (PlayerListEntry)(Object) this;
         synchronized (playerListEntry) {
-            if (!this.texturesLoaded) {
-                this.texturesLoaded = true;
+            if (!this.capeLoaded) {
+                this.capeLoaded = true;
                 MinecraftClient.getInstance().getSkinProvider().loadSkin(this.profile, (type, id, texture) -> {
 
                     if (type != MinecraftProfileTexture.Type.SKIN) {
