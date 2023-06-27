@@ -14,6 +14,8 @@ public class SkinSwapperConfig extends MidnightConfig {
 
     @Entry public static boolean showDownloadScreen = true;
 
+    @Entry public static boolean showArmor = true;
+
     //Offline Mode
     @Comment public static Comment offlineModeOptions;
 

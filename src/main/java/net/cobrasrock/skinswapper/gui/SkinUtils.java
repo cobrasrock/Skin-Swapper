@@ -20,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 
+import net.cobrasrock.skinswapper.config.SkinSwapperConfig;
+
 public class SkinUtils {
 
     public static OtherClientPlayerEntity player;
@@ -43,7 +45,7 @@ public class SkinUtils {
      * @return A dummy player
      */
     public static LivingEntity getDummyPlayer() throws Exception{
-        if(MinecraftClient.getInstance().player != null) return MinecraftClient.getInstance().player;
+        if(MinecraftClient.getInstance().player != null && SkinSwapperConfig.showArmor) return MinecraftClient.getInstance().player;
 
         if(player == null){
 
