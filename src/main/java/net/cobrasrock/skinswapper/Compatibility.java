@@ -6,27 +6,31 @@ import net.minecraft.client.MinecraftClient;
 
 
 public class Compatibility {
+    private static boolean modify = false;
 
-    public static void startSkinPreview(){
+    public static void startSkinPreview() {
         try {
-            ((ConfigAccessor)(SkinLayersModBase.config)).setEnableSkulls(false);
-        } catch (NoClassDefFoundError ignored){
+            if (((ConfigAccessor) (SkinLayersModBase.config)).getEnableSkulls()) {
+                modify = true;
+                ((ConfigAccessor) (SkinLayersModBase.config)).setEnableSkulls(false);
+            }
+        } catch (NoClassDefFoundError ignored) {
             //3d skin layers not installed
         }
     }
 
-    public static void stopSkinPreview(){
+    public static void stopSkinPreview() {
         try {
-            ((ConfigAccessor)(SkinLayersModBase.config)).setEnableSkulls(true);
-        } catch (NoClassDefFoundError ignored){
+            if (modify) ((ConfigAccessor) (SkinLayersModBase.config)).setEnableSkulls(true);
+        } catch (NoClassDefFoundError ignored) {
             //3d skin layers not installed
         }
     }
 
-    public static void onOfflineSkinChange(){
+    public static void onOfflineSkinChange() {
         try {
             SkinLayersModBase.instance.refreshLayers(MinecraftClient.getInstance().player);
-        } catch (NoClassDefFoundError ignored){
+        } catch (NoClassDefFoundError ignored) {
             //3d skin layers not installed
         }
     }

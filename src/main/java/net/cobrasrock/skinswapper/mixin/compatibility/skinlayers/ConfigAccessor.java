@@ -6,8 +6,11 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Pseudo
-@Mixin(Config.class)
+@Mixin(value = Config.class, remap = false)
 public interface ConfigAccessor {
     @Accessor("enableSkulls")
     void setEnableSkulls(boolean enableSkulls);
+
+    @Accessor("enableSkulls")
+    boolean getEnableSkulls();
 }
