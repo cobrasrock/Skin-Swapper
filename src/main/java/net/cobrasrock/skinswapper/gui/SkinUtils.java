@@ -58,9 +58,9 @@ public class SkinUtils {
     }
 
     //draws 3d player in menu
-    public static void drawPlayer(int x, int y, int height, int mouseX, int mouseY) throws Exception{
+    public static void drawPlayer(MatrixStack matrixStack, int x, int y, int height, int mouseX, int mouseY) throws Exception{
         Compatibility.startSkinPreview();
-        InventoryScreen.drawEntity(x, y, height, x-mouseX, (y-160)-mouseY, getDummyPlayer());
+        InventoryScreen.drawEntity(matrixStack, x, y, height, x-mouseX, (y-160)-mouseY, getDummyPlayer());
         Compatibility.stopSkinPreview();
     }
 

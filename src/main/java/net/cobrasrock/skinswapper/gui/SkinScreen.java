@@ -141,7 +141,7 @@ public class SkinScreen extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        this.renderBackgroundTexture(0);
+        this.renderBackgroundTexture(matrices);
         skinList.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
 
@@ -157,7 +157,7 @@ public class SkinScreen extends Screen {
             else {
                 if (getSelected() != null) {
                     try {
-                        SkinUtils.drawPlayer(this.width - (this.width / 4), this.height - 36, 92, mouseX, mouseY);
+                        SkinUtils.drawPlayer(matrices, this.width - (this.width / 4), this.height - 36, 92, mouseX, mouseY);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -167,7 +167,7 @@ public class SkinScreen extends Screen {
 
         //draws error messages
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
-        drawCenteredText(matrices, font, error, this.width - this.width/4, 12, 0xFFFFFF);
+        drawCenteredTextWithShadow(matrices, font, error, this.width - this.width/4, 12, 0xFFFFFF);
     }
 
     public void addSkins(final File folder) {
