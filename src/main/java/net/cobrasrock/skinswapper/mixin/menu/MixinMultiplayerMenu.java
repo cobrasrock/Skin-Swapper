@@ -50,10 +50,10 @@ public class MixinMultiplayerMenu extends Screen {
 	}
 
 	//hides multiplayer text which can block the button
-	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), method = "render")
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;drawCenteredTextWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"), method = "render")
 	private void render(MatrixStack matrices, TextRenderer textRenderer, Text text, int centerX, int y, int color){
 		if(!(SkinSwapperConfig.multiplayerButton == SkinSwapperConfig.ModButton.CENTER)){
-			drawCenteredText(matrices, textRenderer, text, centerX, y, color);
+			drawCenteredTextWithShadow(matrices, textRenderer, text, centerX, y, color);
 		}
 	}
 }

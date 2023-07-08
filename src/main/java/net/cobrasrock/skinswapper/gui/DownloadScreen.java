@@ -49,11 +49,11 @@ public class DownloadScreen extends Screen {
     }
     
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackgroundTexture(0);
+        this.renderBackgroundTexture(matrices);
         this.downloadField.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
-        drawCenteredText(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
-        drawCenteredText(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
+        drawCenteredTextWithShadow(matrices, font, I18n.translate("skin.username"), this.width/2, 5, 0xFFFFFF);
+        drawCenteredTextWithShadow(matrices, font, error, this.width/2, this.height/2, 0xFFFFFF);
     }
 
     @Override

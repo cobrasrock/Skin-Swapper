@@ -49,7 +49,7 @@ dependencies {
 	implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12'
 
 	//modmenu
-	modImplementation "curse.maven:${project.modmenu_version}"
+	modImplementation "maven.modrinth:${project.modmenu_version}"
 
 	//3d skin layers
 	modImplementation "maven.modrinth:${project.skinlayers_version}"
